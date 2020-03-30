@@ -2,12 +2,15 @@
 
 
 from data_structure.period import Period
+from modules.timer import TimerModule
 
 
 class Monitor:
 
     def main():
-        test_period = Period("10.10.2010", "5h")
+        timer = TimerModule()
+        result = timer.time_it()
+        test_period = Period(result)
         date, work_time = test_period.get_period()
         print(date)
         print(work_time)
