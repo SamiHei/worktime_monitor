@@ -7,7 +7,7 @@ class TimerModule:
 
     
     """
-    Takes time until user gives input to pause, continue or stop
+    "Takes time" until user gives input to pause, continue or stop
     """
     def time_it(self):
         start_time = time.time()
