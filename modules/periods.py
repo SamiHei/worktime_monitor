@@ -2,7 +2,7 @@
 
 
 """
-This class contains all the periods and methods saving, reading and presenting
+This module contains all the periods and methods for saving, reading and presenting
 """
 class Periods:
 
