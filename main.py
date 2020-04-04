@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+from common_variables import header
 from data_structure.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
@@ -16,7 +17,7 @@ class Monitor:
 
         timer = TimerModule()
 
-        menu = ConsoleMenu("Test menu", "Test subtitle")
+        menu = ConsoleMenu(header, "=" * 68)
 
         function_item = FunctionItem("Call a function", input, ["Enter some input"])
 
