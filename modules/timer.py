@@ -20,16 +20,16 @@ class TimerModule:
 
             if (str == "0" or str == "h" or str == "help"):
                 self.print_instructions()
-            if (str == "1" or str == "p" or str == "pause"):
+            elif (str == "1" or str == "p" or str == "pause"):
                 state = False
                 self.print_timer_state("paused")
                 end_time = time.time()
                 elapsed_time += end_time - start_time
-            if ((str == "2" or str == "c" or str == "continue") and state == False):
+            elif ((str == "2" or str == "c" or str == "continue") and state == False):
                 state = True
                 self.print_timer_state("continued")
                 start_time = time.time()
-            if (str == "3" or str == "s" or str == "stop"):
+            elif (str == "3" or str == "s" or str == "stop"):
                 self.print_timer_state("stopped")
                 end_time = time.time()
                 break

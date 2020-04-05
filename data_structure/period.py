@@ -13,9 +13,9 @@ This class presents working period which saves the date and the time
 class Period:
 
 
-    def __init__(self, work_time):
+    def __init__(self):
         self.date = date.today().strftime("%d.%m.%Y")
-        self.work_time = work_time
+        self.work_time = 0
 
 
     def __str__(self):
