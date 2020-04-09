@@ -39,9 +39,9 @@ class Monitor:
         # timer_item = FunctionItem("Start the timer", self.timer.time_it)
 
         # self.menu.append_item(timer_item)
-        self.menu.append_item(self.build_month_menu())
         self.menu.append_item(self.build_timer_view())
-
+        self.menu.append_item(self.build_month_menu())
+       
         self.menu.show()
         
         # return timer_item.get_return()
@@ -58,15 +58,19 @@ class Monitor:
 
     # TODO: functionalities for functions here
     def build_timer_view(self):
+        timer_module = TimerModule()
         timer_view = ConsoleMenu("Timer!")
-        pause_timer = FunctionItem("Pause", print("Paused"))
-        continue_timer = FunctionItem("Continue", print("Continue"))
-        stop_timer = FunctionItem("Stop", print("Stop"))
+        start_timer = FunctionItem("Start", timer_module.start_timer, menu=timer_view, should_exit=False)
+        pause_timer = FunctionItem("Pause", timer_module.pause_timer, menu=timer_view, should_exit=False)
+        continue_timer = FunctionItem("Continue", timer_module.continue_timer, menu=timer_view, should_exit=False)
+        stop_timer = FunctionItem("Stop", timer_module.stop_timer, menu=timer_view, should_exit=True)
+        
+        timer_view.append_item(start_timer)
         timer_view.append_item(pause_timer)
         timer_view.append_item(continue_timer)
         timer_view.append_item(stop_timer)
-        testi = FunctionItem("Testi", timer_view.show)
-        return testi
+        timer = FunctionItem("Timer", timer_view.show)
+        return timer
         
              
 
