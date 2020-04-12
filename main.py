@@ -4,76 +4,110 @@ from common_variables import header
 from data_structure.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
-from consolemenu import ConsoleMenu
-from consolemenu.items import FunctionItem
+import curses
+
+# temp import
+import time
 
 
-# DOCS: https://console-menu.readthedocs.io/en/latest/
-
-"""
+'''
   Monitor is the base of the program which controls everything
-"""
+'''
 class Monitor:
 
     
     def __init__(self):
+        self.stdscr = curses.initscr()
         self.timer = TimerModule()
-        self.menu = ConsoleMenu(header, "=" * 68)
         self.periods = Periods()
-    
 
-    # TODO: get value/values from timer.time_it and use it properly
+
     def main(self):
-        # testi = Period()
-        # testi.set_work_time(self.build_menu())
-        # self.periods.add_period(testi)
-        # print(self.periods)
-        self.build_menu()
+        curses.wrapper(self.build_main_menu)
         
 
-    """
+    '''
     Base menu of the program contains all the other menus and functions
-    """
-    def build_menu(self):
-        date_menu = ConsoleMenu("Here comes list of months")
-        # timer_item = FunctionItem("Start the timer", self.timer.time_it)
+    '''
+    def build_main_menu(self, stdscr):
 
-        # self.menu.append_item(timer_item)
-        self.menu.append_item(self.build_timer_view())
-        self.menu.append_item(self.build_month_menu())
-       
-        self.menu.show()
+        current_row_idx = 0
+        menu = ["Timer", "Months", "Exit"]
+
+        self.print_main_menu(menu, current_row_idx)
         
-        # return timer_item.get_return()
+        
+        while 1:
+
+            key = self.stdscr.getch()
+            
+            self.stdscr.clear()
+            
+            if (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(menu) - 1)):
+                current_row_idx += 1
+            elif (key == curses.KEY_ENTER or key in [10, 13]):
+                self.stdscr.addstr(0,0, "You pressed {}".format(menu[current_row_idx]))
+                self.stdscr.refresh()
+                self.stdscr.getch()
+                if (current_row_idx == (len(menu) - 1)):
+                    curses.nocbreak()
+                    stdscr.keypad(False)
+                    curses.echo()
+                    curses.endwin()
+                    break
 
 
-    """
+            self.print_main_menu(menu, current_row_idx)
+
+            self.stdscr.refresh()
+
+
+    '''
+    Commont method to print menu items to screen
+        menu = Array of menu items
+        current_row_idx = Selected row index
+    '''
+    def print_main_menu(self, menu, current_row_idx):
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+        self.stdscr.clear()
+        h, w = self.stdscr.getmaxyx()
+
+        curses.curs_set(0)
+        curses.noecho()
+        self.stdscr.keypad(True)
+        
+        for idx, row in enumerate(menu):
+            x = w//2
+            y = h//2 - len(menu)//2 + idx
+            if (idx == current_row_idx):
+                self.stdscr.attron(curses.color_pair(1))
+                self.stdscr.addstr(y, x, row)
+                self.stdscr.attroff(curses.color_pair(1))
+            else:
+                self.stdscr.addstr(y, x, row)
+                
+
+        self.stdscr.refresh()
+
+
+    '''
     Will contain menu to scroll years/months/dates and see your saved time periods
-    """
+    '''
     def build_month_menu(self):
-        month_menu = ConsoleMenu("Browse months")
-        month_menu_item = FunctionItem("List of months", month_menu.show)
-        return month_menu_item
+        print("Month menu")
 
 
-    # TODO: functionalities for functions here
+    '''
+    Timer view which uses Timer Module
+    '''
     def build_timer_view(self):
-        timer_module = TimerModule()
-        timer_view = ConsoleMenu("Timer!")
-        start_timer = FunctionItem("Start", timer_module.start_timer, menu=timer_view, should_exit=False)
-        pause_timer = FunctionItem("Pause", timer_module.pause_timer, menu=timer_view, should_exit=False)
-        continue_timer = FunctionItem("Continue", timer_module.continue_timer, menu=timer_view, should_exit=False)
-        stop_timer = FunctionItem("Stop", timer_module.stop_timer, menu=timer_view, should_exit=True)
-        
-        timer_view.append_item(start_timer)
-        timer_view.append_item(pause_timer)
-        timer_view.append_item(continue_timer)
-        timer_view.append_item(stop_timer)
-        timer = FunctionItem("Timer", timer_view.show)
-        return timer
+        print("Timer view")
         
              
-
 if __name__ == '__main__':
     monitor = Monitor()
     monitor.main()
