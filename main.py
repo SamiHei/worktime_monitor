@@ -6,9 +6,6 @@ from modules.periods import Periods
 from modules.timer import TimerModule
 import curses
 
-# temp import
-import time
-
 
 '''
   Monitor is the base of the program which controls everything
@@ -34,7 +31,8 @@ class Monitor:
         current_row_idx = 0
         menu = ["Timer", "Months", "Exit"]
 
-        self.print_main_menu(menu, current_row_idx)
+        
+        self.print_main_menu(menu, header, current_row_idx)
         
         
         while 1:
@@ -58,8 +56,7 @@ class Monitor:
                     curses.endwin()
                     break
 
-
-            self.print_main_menu(menu, current_row_idx)
+            self.print_main_menu(menu, header, current_row_idx)
 
             self.stdscr.refresh()
 
@@ -69,7 +66,7 @@ class Monitor:
         menu = Array of menu items
         current_row_idx = Selected row index
     '''
-    def print_main_menu(self, menu, current_row_idx):
+    def print_main_menu(self, menu, menu_header, current_row_idx):
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
@@ -80,6 +77,8 @@ class Monitor:
         curses.noecho()
         self.stdscr.keypad(True)
         
+        self.print_header(menu_header)
+
         for idx, row in enumerate(menu):
             x = w//2
             y = h//2 - len(menu)//2 + idx
@@ -93,6 +92,20 @@ class Monitor:
 
         self.stdscr.refresh()
 
+
+    def print_header(self, menu_header):
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+        h, w = self.stdscr.getmaxyx()
+
+        x = w//2
+        y = h//5
+
+        self.stdscr.attron(curses.color_pair(1))
+        self.stdscr.addstr(y, x, menu_header)
+        self.stdscr.attroff(curses.color_pair(1))
+        
 
     '''
     Will contain menu to scroll years/months/dates and see your saved time periods
