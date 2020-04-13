@@ -70,6 +70,7 @@ class Monitor:
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
+
         self.stdscr.clear()
         h, w = self.stdscr.getmaxyx()
 
@@ -95,16 +96,17 @@ class Monitor:
 
     def print_header(self, menu_header):
         curses.start_color()
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
         h, w = self.stdscr.getmaxyx()
 
-        x = w//2
-        y = h//5
+        width = w//11
+        height = h//7
 
-        self.stdscr.attron(curses.color_pair(1))
-        self.stdscr.addstr(y, x, menu_header)
-        self.stdscr.attroff(curses.color_pair(1))
+        self.stdscr.attron(curses.color_pair(2))
+        for y, line in enumerate(menu_header.splitlines(), height):
+            self.stdscr.addstr(y, width, line)
+        self.stdscr.attroff(curses.color_pair(2))
         
 
     '''
