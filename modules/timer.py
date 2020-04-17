@@ -2,7 +2,13 @@
 
 import time
 
-
+'''
+Timer module uses Python3 time standard library
+     state = True/False - is timer running or paused
+     start_time = takes time in seconds since the epoch
+     elapsed_time = saves measured time if timer is paused
+     end_time = takes new time in seconds since the epoch
+'''
 class TimerModule:
 
 
@@ -13,6 +19,9 @@ class TimerModule:
         self.end_time = 0
 
 
+    '''
+    Takes time in seconds since the epoch and uses that as the start time
+    '''
     def start_timer(self):
         if (self.start_time is 0):
             self.start_time = time.time()
@@ -21,6 +30,9 @@ class TimerModule:
             print("Timer allready started!")
 
 
+    '''
+    "Pauses" the running timer
+    '''
     def pause_timer(self):
         if (self.state is True):
             self.state = False
@@ -30,6 +42,9 @@ class TimerModule:
             print("Timer allready paused!") # TODO: Bring this to console view
 
 
+    '''
+    "Continues" the running timer if the state is paused
+    '''        
     def continue_timer(self):
         if (self.state is False):
             self.state = True
@@ -38,6 +53,9 @@ class TimerModule:
             print("Timer allready running!") # TODO: Bring this to console view
 
 
+    '''
+    Stops the timer and returns the measured time according if the timer was running or stopped
+    '''
     def stop_timer(self):
         if (self.state is False):
             return elapsed_time
