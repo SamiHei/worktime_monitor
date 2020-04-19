@@ -6,6 +6,7 @@ from modules.periods import Periods
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 import curses
+import time
 
 
 '''
@@ -56,9 +57,9 @@ class Monitor:
         UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
         
         while 1:
-                
+
             key = self.stdscr.getch()
-                
+
             self.stdscr.clear()
 
             if (key == curses.KEY_UP and current_row_idx == 0):
@@ -73,14 +74,11 @@ class Monitor:
                 if (current_row_idx == (len(menu) - 1)):
                     break
                 elif (current_row_idx == 0):
-                    self.stdscr.clear()
                     self.timer_menu(current_row_idx)
-                    self.stdscr.refresh()
-                    self.stdscr.getch()
+
 
             self.stdscr.clear()
             UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
-                    
             self.stdscr.refresh()
 
 
@@ -93,7 +91,10 @@ class Monitor:
 
         timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
 
-        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+        self.stdscr.clear()
+
+        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                                   self.timer.get_state(), self.timer.get_elapsed_time())
 
         while 1:
                 
@@ -116,18 +117,22 @@ class Monitor:
                 elif (current_row_idx == 0):
                     self.stdscr.clear()
                     self.timer.start_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                                               self.timer.get_state(), self.timer.get_elapsed_time())
                 elif (current_row_idx == 1):
                     self.stdscr.clear()
                     self.timer.pause_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                                               self.timer.get_state(), self.timer.get_elapsed_time())
                 elif (current_row_idx == 2):
                     self.stdscr.clear()
                     self.timer.continue_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                                               self.timer.get_state(), self.timer.get_elapsed_time())
 
             self.stdscr.clear()
-            UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+            UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                                       self.timer.get_state(), self.timer.get_elapsed_time())
 
             self.stdscr.refresh()
 

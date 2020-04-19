@@ -26,6 +26,10 @@ class TimerModule:
         return self.state
 
 
+    def get_elapsed_time(self):
+        return self.elapsed_time
+
+
     '''
     Takes time in seconds since the epoch and uses that as the start time
     '''
@@ -60,8 +64,9 @@ class TimerModule:
         if (self.state == "Paused"):
             return self.elapsed_time
         else:
+            self.end_time = time.time()
             self.state = "Stopped"
-            return (self.end_time - self.start_time + self.elapsed_time)
+            return (self.end_time - (self.start_time + self.elapsed_time))
 
 
     def print_timer_state(self, status):
