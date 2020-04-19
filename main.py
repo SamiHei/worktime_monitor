@@ -4,11 +4,12 @@ from common_variables import header
 from data_structure.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
+from ui.ui_builder import UiBuilder
 import curses
 
 
 '''
-  Monitor is the base of the program which controls everything
+Monitor is the base of the program which controls everything
 '''
 class Monitor:
 
@@ -20,7 +21,9 @@ class Monitor:
 
 
     def main(self):
-        curses.wrapper(self.build_main_menu)
+        self.set_start_settings()
+        curses.wrapper(self.main_menu)
+        self.end_program()
 
 
     '''
@@ -44,85 +47,53 @@ class Monitor:
         curses.endwin()
 
 
-    '''
-    Base menu of the program contains all the other menus and functions
-    '''
-    def build_main_menu(self, stdscr):
+    def main_menu(self, stdscr):
 
         current_row_idx = 0
         menu = ["Timer", "Months", "Exit"]
 
-        self.set_start_settings()
+            
+        UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
         
-        self.print_main_menu(menu, header, current_row_idx)
-
         while 1:
-
+                
             key = self.stdscr.getch()
-            
+                
             self.stdscr.clear()
-            
+                
             if (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
             elif (key == curses.KEY_DOWN and current_row_idx < (len(menu) - 1)):
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
-                self.stdscr.addstr(0,0, "You pressed {}".format(menu[current_row_idx]))
-                self.stdscr.refresh()
-                self.stdscr.getch()
+                # self.stdscr.addstr(0,0, "You pressed {}".format(menu[current_row_idx]))
+                # self.stdscr.addstr(0,2, "You pressed {}".format(current_row_idx))
+                # self.stdscr.refresh()
+                # self.stdscr.getch()
                 if (current_row_idx == (len(menu) - 1)):
-                    self.end_program()
                     break
+                elif (current_row_idx == 0):
+                    self.stdscr.clear()
+                    self.timer_menu(current_row_idx)
+                    # UiBuilder.print_main_menu(self.stdscr, timer_menu, "", current_row_idx)
+                    self.stdscr.refresh()
+                    self.stdscr.getch()
 
-            self.print_main_menu(menu, header, current_row_idx)
-
+            self.stdscr.clear()
+            UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
+                    
             self.stdscr.refresh()
 
 
     '''
-    Method to print menu items to screen
-        menu = Array of menu items
-        menu_header = ascii graphic header
-        current_row_idx = Selected row index
+    Timer view which uses Timer Module
     '''
-    def print_main_menu(self, menu, menu_header, current_row_idx):
+    def timer_menu(self, current_row):
 
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Stop timer"]
 
-        h, w = self.stdscr.getmaxyx()
-        menu_y = h//2 - len(menu)//2
-        
-        self.print_header(menu_header, menu_y)
+        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row)
 
-        for idx, row in enumerate(menu):
-            x = w//2
-            y = menu_y + idx
-            if (idx == current_row_idx):
-                self.stdscr.attron(curses.color_pair(1))
-                self.stdscr.addstr(y, x, row)
-                self.stdscr.attroff(curses.color_pair(1))
-            else:
-                self.stdscr.addstr(y, x, row)
-
-        self.stdscr.refresh()
-
-
-    '''
-    Method to print ascii graphic header to menu
-    '''
-    def print_header(self, menu_header, menu_y):
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
-
-        h, w = self.stdscr.getmaxyx()
-
-        width = w//2 - 23
-        height = menu_y - 10
-
-        self.stdscr.attron(curses.color_pair(2))
-        for y, line in enumerate(menu_header.splitlines(), height):
-            self.stdscr.addstr(y, width, line)
-        self.stdscr.attroff(curses.color_pair(2))
-        
 
     '''
     Will contain menu to scroll years/months/dates and see your saved time periods
@@ -130,13 +101,6 @@ class Monitor:
     def build_month_menu(self):
         print("Month menu")
 
-
-    '''
-    Timer view which uses Timer Module
-    '''
-    def build_timer_view(self):
-        print("Timer view")
-   
 
 if __name__ == '__main__':
     monitor = Monitor()

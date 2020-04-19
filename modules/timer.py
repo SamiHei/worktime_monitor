@@ -2,12 +2,15 @@
 
 import time
 
+
 '''
 Timer module uses Python3 time standard library
+
      state = True/False - is timer running or paused
      start_time = takes time in seconds since the epoch
      elapsed_time = saves measured time if timer is paused
      end_time = takes new time in seconds since the epoch
+
 '''
 class TimerModule:
 
