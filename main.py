@@ -16,7 +16,7 @@ class Monitor:
     
     def __init__(self):
         self.stdscr = curses.initscr()
-        self.timer = TimerModule()
+        self.timer = None
         self.periods = Periods()
 
 
@@ -89,7 +89,9 @@ class Monitor:
     '''
     def timer_menu(self, current_row_idx):
 
-        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Stop timer", "Back"]
+        self.timer = TimerModule()
+
+        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
 
         UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
 
@@ -100,7 +102,7 @@ class Monitor:
             self.stdscr.clear()
 
             if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = len(timer_menu)
+                current_row_idx = len(timer_menu) - 1
             elif (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
             elif (key == curses.KEY_DOWN and current_row_idx == (len(timer_menu) - 1)):
@@ -109,12 +111,20 @@ class Monitor:
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
                 if (current_row_idx == (len(timer_menu) - 1)):
+                    self.timer.stop_timer()
                     break
                 elif (current_row_idx == 0):
                     self.stdscr.clear()
-                    self.stdscr.addstr(0,0, "You pressed {}".format(timer_menu[current_row_idx]))
-                    self.stdscr.refresh()
-                    self.stdscr.getch()
+                    self.timer.start_timer()
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+                elif (current_row_idx == 1):
+                    self.stdscr.clear()
+                    self.timer.pause_timer()
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+                elif (current_row_idx == 2):
+                    self.stdscr.clear()
+                    self.timer.continue_timer()
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
 
             self.stdscr.clear()
             UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())

@@ -22,16 +22,13 @@ class TimerMenuBuilder:
             else:
                 stdscr.addstr(y, x, row)
 
+        stdscr.refresh()
+
 
     @staticmethod
     def print_timer_state(stdscr, timer_state):
 
-        if (timer_state == False):
-            state = "Paused"
-        else:
-            state = "Running"
-
-        state_string = "Timer state: {}".format(state)
+        state_string = "Timer state: {}".format(timer_state)
         h, w = stdscr.getmaxyx()
 
         x = w//2 - len(state_string)//2
