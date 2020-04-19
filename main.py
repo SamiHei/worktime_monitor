@@ -60,22 +60,21 @@ class Monitor:
             key = self.stdscr.getch()
                 
             self.stdscr.clear()
-                
-            if (key == curses.KEY_UP and current_row_idx > 0):
+
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = len(menu) - 1
+            elif (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(menu) - 1)):
+                current_row_idx = 0
             elif (key == curses.KEY_DOWN and current_row_idx < (len(menu) - 1)):
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
-                # self.stdscr.addstr(0,0, "You pressed {}".format(menu[current_row_idx]))
-                # self.stdscr.addstr(0,2, "You pressed {}".format(current_row_idx))
-                # self.stdscr.refresh()
-                # self.stdscr.getch()
                 if (current_row_idx == (len(menu) - 1)):
                     break
                 elif (current_row_idx == 0):
                     self.stdscr.clear()
                     self.timer_menu(current_row_idx)
-                    # UiBuilder.print_main_menu(self.stdscr, timer_menu, "", current_row_idx)
                     self.stdscr.refresh()
                     self.stdscr.getch()
 
@@ -88,11 +87,39 @@ class Monitor:
     '''
     Timer view which uses Timer Module
     '''
-    def timer_menu(self, current_row):
+    def timer_menu(self, current_row_idx):
 
-        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Stop timer"]
+        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Stop timer", "Back"]
 
-        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row)
+        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+
+        while 1:
+                
+            key = self.stdscr.getch()
+                
+            self.stdscr.clear()
+
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = len(timer_menu)
+            elif (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(timer_menu) - 1)):
+                current_row_idx = 0
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(timer_menu) - 1)):
+                current_row_idx += 1
+            elif (key == curses.KEY_ENTER or key in [10, 13]):
+                if (current_row_idx == (len(timer_menu) - 1)):
+                    break
+                elif (current_row_idx == 0):
+                    self.stdscr.clear()
+                    self.stdscr.addstr(0,0, "You pressed {}".format(timer_menu[current_row_idx]))
+                    self.stdscr.refresh()
+                    self.stdscr.getch()
+
+            self.stdscr.clear()
+            UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, self.timer.get_state())
+
+            self.stdscr.refresh()
 
 
     '''

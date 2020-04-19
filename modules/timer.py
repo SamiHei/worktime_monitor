@@ -22,6 +22,10 @@ class TimerModule:
         self.end_time = 0
 
 
+    def get_state(self):
+        return self.state
+
+
     '''
     Takes time in seconds since the epoch and uses that as the start time
     '''

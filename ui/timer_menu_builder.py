@@ -5,7 +5,8 @@ import curses
 class TimerMenuBuilder:
 
     @staticmethod
-    def print_timer_menu(stdscr, menu_items, current_row_idx):
+    def print_timer_menu(stdscr, menu_items, current_row_idx, timer_state):
+        TimerMenuBuilder.print_timer_state(stdscr, timer_state)
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         h, w = stdscr.getmaxyx()
@@ -20,4 +21,22 @@ class TimerMenuBuilder:
                 stdscr.attroff(curses.color_pair(1))
             else:
                 stdscr.addstr(y, x, row)
+
+
+    @staticmethod
+    def print_timer_state(stdscr, timer_state):
+
+        if (timer_state == False):
+            state = "Paused"
+        else:
+            state = "Running"
+
+        state_string = "Timer state: {}".format(state)
+        h, w = stdscr.getmaxyx()
+
+        x = w//2 - len(state_string)//2
+        y = h//4
+
+        stdscr.addstr(y, x, state_string)
+
 
