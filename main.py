@@ -6,7 +6,7 @@ from modules.periods import Periods
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 import curses
-import time
+import time # Temp import for testing
 
 
 '''
@@ -88,6 +88,11 @@ class Monitor:
     def timer_menu(self, current_row_idx):
 
         self.timer = TimerModule()
+        period = Period()
+
+        while 1:
+            period.set_name(UiBuilder.print_ask_period_name(self.stdscr))
+            break
 
         timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
 
@@ -112,7 +117,7 @@ class Monitor:
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
                 if (current_row_idx == (len(timer_menu) - 1)):
-                    self.timer.stop_timer()
+                    period.set_work_time(self.timer.stop_timer())
                     break
                 elif (current_row_idx == 0):
                     self.stdscr.clear()
@@ -135,6 +140,13 @@ class Monitor:
                                        self.timer.get_state(), self.timer.get_elapsed_time())
 
             self.stdscr.refresh()
+
+        # This is testing the period here!
+        self.stdscr.addstr(0, 0, period.get_name())
+        self.stdscr.addstr(1, 0, str(period.get_date()))
+        self.stdscr.addstr(2, 0, str(period.get_work_time()/60))
+        self.stdscr.refresh()
+        time.sleep(2)
 
 
     '''

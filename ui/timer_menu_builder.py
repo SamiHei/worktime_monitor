@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import curses
+from ui.common_builder import CommonBuilder
 
 class TimerMenuBuilder:
 
@@ -39,4 +40,17 @@ class TimerMenuBuilder:
 
         stdscr.addstr(y, x, state_string)
         stdscr.addstr(y_e, x_e, elapsed_time_string)
+
+
+    @staticmethod
+    def print_ask_period_name(stdscr):
+        h, w = stdscr.getmaxyx()
+
+        ask_period_name = "Give name for the to be timed period> "
+        
+        x = w//3 - len(ask_period_name)//2
+        y = h//2
+
+        period_name = CommonBuilder.take_user_input(stdscr, y, x, ask_period_name)
+        return period_name
 

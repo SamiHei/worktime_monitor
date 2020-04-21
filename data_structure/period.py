@@ -14,6 +14,7 @@ class Period:
 
 
     def __init__(self):
+        self.name = None
         self.date = date.today().strftime("%d.%m.%Y")
         self.work_time = 0
 
@@ -43,4 +44,12 @@ class Period:
 
     def get_period(self):
         return self.date, self.work_time
+
+
+    def set_name(self, name):
+        self.name = name.lower()
+
+
+    def get_name(self):
+        return self.name
 
