@@ -58,16 +58,15 @@ class TimerModule:
 
 
     '''
-    Stops the timer and returns the measured time according if the timer was running or stopped
+    "Stops" the timer and returns the measured time according if the timer was running or stopped
     '''
     def stop_timer(self):
         if (self.state == "Paused"):
             return self.elapsed_time
+        elif (self.state == "Stopped"):
+            return 0
         else:
             self.end_time = time.time()
             self.state = "Stopped"
-            return (self.end_time - (self.start_time + self.elapsed_time))
+            return (self.end_time - self.start_time) + self.elapsed_time
 
-
-    def print_timer_state(self, status):
-        print("Timer " + status)
