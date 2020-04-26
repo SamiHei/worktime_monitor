@@ -34,9 +34,9 @@ class TimerMenuBuilder:
         h, w = stdscr.getmaxyx()
 
         x = w//2 - len(state_string)//2
-        y = h//4
+        y = h//2 - 5
         x_e = w//2 - len(elapsed_time_string)//2
-        y_e = h//4 + 1
+        y_e = y - 1
 
         stdscr.addstr(y, x, state_string)
         stdscr.addstr(y_e, x_e, elapsed_time_string)
