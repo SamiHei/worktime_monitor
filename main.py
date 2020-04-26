@@ -6,6 +6,7 @@ from modules.periods import Periods
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 from db.database import DatabaseModule
+import sqlite3
 import curses
 import time # Temp import for testing
 
@@ -23,11 +24,18 @@ class Monitor:
 
 
     def main(self):
-        db = DatabaseModule()
-        db.create_connection()
-        self.set_start_settings()
-        curses.wrapper(self.main_menu)
-        self.end_program()
+        try:
+            db = DatabaseModule()
+            con = db.create_connection()
+            db.create_period_table(con)
+            self.set_start_settings()
+            curses.wrapper(self.main_menu)
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            self.end_program()
+            if (con):
+                con.close()
 
 
     '''
