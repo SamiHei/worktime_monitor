@@ -27,7 +27,7 @@ class DatabaseModule:
             c = connection.cursor()
             c.execute('''
                       CREATE TABLE periods
-                      (id INTEGER PRIMARY KEY AUTOINCREMENT, date DATE, name_id INTEGER, work_time INTEGER)''')
+                      (date DATE, name_id INTEGER, work_time INTEGER, PRIMARY KEY (date, name_id));''')
             connection.commit()
         except sqlite3.Error as e:
             print(e)
