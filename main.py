@@ -5,6 +5,7 @@ from data_structure.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
+from db.database import DatabaseModule
 import curses
 import time # Temp import for testing
 
@@ -22,6 +23,8 @@ class Monitor:
 
 
     def main(self):
+        db = DatabaseModule()
+        db.create_connection()
         self.set_start_settings()
         curses.wrapper(self.main_menu)
         self.end_program()
