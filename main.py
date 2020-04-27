@@ -1,13 +1,14 @@
 #! /usr/bin/python3
 
 from common_variables import header
-from data_structure.period import Period
+from data_structures.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 from db.database import DatabaseModule
 import sqlite3
 import curses
+import os
 import time # Temp import for testing
 
 
@@ -21,21 +22,21 @@ class Monitor:
         self.stdscr = curses.initscr()
         self.timer = None
         self.periods = Periods()
+        self.db_name = "database.db"
 
 
     def main(self):
         try:
-            db = DatabaseModule()
-            con = db.create_connection()
-            db.create_period_table(con)
+            db = DatabaseModule(self.db_name)
+            if not (os.path.isfile(self.db_name)):
+                con = db.create_connection()
+                db.create_database(con)
             self.set_start_settings()
             curses.wrapper(self.main_menu)
         except sqlite3.Error as e:
             print(e)
         finally:
             self.end_program()
-            if (con):
-                con.close()
 
 
     '''
@@ -153,6 +154,9 @@ class Monitor:
             self.stdscr.refresh()
 
         # This is testing the period here!
+        db = DatabaseModule(self.db_name)
+        db.insert_period(period)
+        db.insert_period_name(period)
         self.stdscr.addstr(0, 0, period.get_name())
         self.stdscr.addstr(1, 0, str(period.get_date()))
         self.stdscr.addstr(2, 0, str(period.get_work_time()/60))
