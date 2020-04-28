@@ -159,7 +159,7 @@ class Monitor:
         db.insert_period_name(period)
         self.stdscr.addstr(0, 0, period.get_name())
         self.stdscr.addstr(1, 0, str(period.get_date()))
-        self.stdscr.addstr(2, 0, str(period.get_work_time()/60))
+        self.stdscr.addstr(2, 0, str(period.get_work_time()))
         self.stdscr.refresh()
         time.sleep(2)
 

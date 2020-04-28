@@ -24,15 +24,13 @@ class DatabaseModule:
 
     '''
     Insert statement for period
-    
-    TODO: period name id 
     '''
     def insert_period(self, period):
         try:
             con = self.create_connection()
             c = con.cursor()
             c.execute('''
-                      INSERT INTO periods(date, name_id, work_time)
+                      INSERT INTO periods (date, name_id, work_time)
                       VALUES(?, ?, ?);''', (str(period.get_date()), 1, str(period.get_work_time())))
             con.commit()
         except sqlite3.Error as e:
@@ -42,15 +40,15 @@ class DatabaseModule:
 
 
     '''
-    TODO: This doesn't work yet!
+    Insert statement for period name
     '''
     def insert_period_name(self, period):
         try:
             con = self.create_connection()
             c = con.cursor()
             c.execute('''
-                      INSERT INTO period_names(id, period_name)
-                      VALUES(?);''', period.get_name())
+                      INSERT INTO period_names (period_name)
+                      VALUES(?);''', (period.get_name(),))
             con.commit()
         except sqlite3.Error as e:
             print(e)
@@ -80,7 +78,11 @@ class DatabaseModule:
             c = connection.cursor()
             c.execute('''
                       CREATE TABLE periods
-                      (date DATE, name_id INTEGER, work_time INTEGER, PRIMARY KEY (date, name_id));''')
+                      (date DATE, 
+                       name_id INTEGER, 
+                       work_time INTEGER, 
+                       PRIMARY KEY (date, name_id),
+                       FOREIGN KEY(name_id) REFERENCES period_names(name_id));''')
             connection.commit()
         except sqlite3.Error as e:
             print(e)
@@ -95,8 +97,7 @@ class DatabaseModule:
             c.execute('''
                       CREATE TABLE period_names
                       (name_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      period_name TEXT,
-                      FOREIGN KEY(name_id) REFERENCES periods(name_id));''')
+                      period_name TEXT UNIQUE);''')
             connection.commit()
         except sqlite3.Error as e:
             print(e)
