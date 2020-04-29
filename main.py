@@ -9,7 +9,7 @@ from db.database import DatabaseModule
 import sqlite3
 import curses
 import os
-import time # Temp import for testing
+import time # For testing
 
 
 '''
@@ -153,13 +153,12 @@ class Monitor:
 
             self.stdscr.refresh()
 
-        # This is testing the period here!
+        # This is testing the period here! Clean at the end to only save data!
         db = DatabaseModule(self.db_name)
-        db.insert_period(period)
         db.insert_period_name(period)
-        self.stdscr.addstr(0, 0, period.get_name())
-        self.stdscr.addstr(1, 0, str(period.get_date()))
-        self.stdscr.addstr(2, 0, str(period.get_work_time()))
+        period_name_id = db.get_period_name_id(period)
+        db.insert_period(period, period_name_id[0])
+        self.stdscr.addstr(0, 0, str(period_name_id[0]))
         self.stdscr.refresh()
         time.sleep(2)
 

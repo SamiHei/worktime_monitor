@@ -4,6 +4,7 @@ import sqlite3
 
 
 # Documentation: https://docs.python.org/3/library/sqlite3.html
+# TODO: error logging to file?
 
 class DatabaseModule:
 
@@ -23,24 +24,25 @@ class DatabaseModule:
 
 
     '''
-    Insert statement for period
+    Insert statement for period to periods table
     '''
-    def insert_period(self, period):
+    def insert_period(self, period, period_name_id):
         try:
             con = self.create_connection()
             c = con.cursor()
             c.execute('''
                       INSERT INTO periods (date, name_id, work_time)
-                      VALUES(?, ?, ?);''', (str(period.get_date()), 1, str(period.get_work_time())))
+                      VALUES(?, ?, ?);''', (str(period.get_date()), period_name_id, str(period.get_work_time())))
             con.commit()
         except sqlite3.Error as e:
             print(e)
         finally:
+            c.close()
             con.close()
 
 
     '''
-    Insert statement for period name
+    Insert statement for period name into period_names table
     '''
     def insert_period_name(self, period):
         try:
@@ -53,8 +55,26 @@ class DatabaseModule:
         except sqlite3.Error as e:
             print(e)
         finally:
+            c.close()
             con.close()
 
+
+    '''
+    Select statement to get period_name_id by period_name
+    '''
+    def get_period_name_id(self, period):
+        try:
+            con = self.create_connection()
+            c = con.cursor()
+            c.execute('SELECT name_id FROM period_names WHERE period_name=?', (period.get_name(),))
+            period_name_id = c.fetchone()
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            c.close()
+            con.close()
+
+        return period_name_id
 
 
     '''
@@ -86,6 +106,8 @@ class DatabaseModule:
             connection.commit()
         except sqlite3.Error as e:
             print(e)
+        finally:
+            c.close()
 
 
     '''
@@ -101,3 +123,5 @@ class DatabaseModule:
             connection.commit()
         except sqlite3.Error as e:
             print(e)
+        finally:
+            c.close()

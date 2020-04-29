@@ -47,7 +47,7 @@ class Period:
 
 
     def set_name(self, name):
-        self.name = name.lower()
+        self.name = name.lower().strip()
 
 
     def get_name(self):
