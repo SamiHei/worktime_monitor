@@ -16,14 +16,14 @@ class MainMenuBuilder:
 
     '''
     @staticmethod
-    def print_main_menu(stdscr, menu, menu_header, current_row_idx):
+    def print_main_menu(stdscr, menu, current_row_idx):
 
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         h, w = stdscr.getmaxyx()
         menu_y = h//2 - len(menu)//2
         
-        MainMenuBuilder.print_header(stdscr, menu_header, menu_y)
+        MainMenuBuilder.print_header(stdscr, header, menu_y)
 
         for idx, row in enumerate(menu):
             x = w//2

@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-from common_variables import header
+#from common_variables import header
 from data_structures.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
@@ -66,7 +66,7 @@ class Monitor:
         menu = ["Timer", "Months", "Exit"]
 
             
-        UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
+        UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
         
         while 1:
 
@@ -90,7 +90,7 @@ class Monitor:
 
 
             self.stdscr.clear()
-            UiBuilder.print_main_menu(self.stdscr, menu, header, current_row_idx)
+            UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
             self.stdscr.refresh()
 
 
