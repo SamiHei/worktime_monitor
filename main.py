@@ -23,14 +23,15 @@ class Monitor:
         self.timer = None
         self.periods = Periods()
         self.db_name = "database.db"
+        self.db = DatabaseModule(self.db_name)
 
 
     def main(self):
         try:
-            db = DatabaseModule(self.db_name)
+            # db = DatabaseModule(self.db_name)
             if not (os.path.isfile(self.db_name)):
-                con = db.create_connection()
-                db.create_database(con)
+                con = self.db.create_connection()
+                self.db.create_database(con)
             self.set_start_settings()
             curses.wrapper(self.main_menu)
         except sqlite3.Error as e:
@@ -153,14 +154,13 @@ class Monitor:
 
             self.stdscr.refresh()
 
-        # This is testing the period here! Clean at the end to only save data!
-        db = DatabaseModule(self.db_name)
-        db.insert_period_name(period)
-        period_name_id = db.get_period_name_id(period)
-        db.insert_period(period, period_name_id[0])
-        self.stdscr.addstr(0, 0, str(period_name_id[0]))
-        self.stdscr.refresh()
-        time.sleep(2)
+        # Saves the data to database
+        self.db.insert_period_name(period)
+        period_name_id = self.db.get_period_name_id(period)
+        try:
+            self.db.insert_period(period, period_name_id[0])
+        except sqlite3.Error:
+            self.db.update_period(period, period_name_id[0])
 
 
     '''

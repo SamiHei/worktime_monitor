@@ -34,6 +34,23 @@ class DatabaseModule:
                       INSERT INTO periods (date, name_id, work_time)
                       VALUES(?, ?, ?);''', (str(period.get_date()), period_name_id, str(period.get_work_time())))
             con.commit()
+        except sqlite3.Error:
+            raise sqlite3.Error
+        finally:
+            c.close()
+            con.close()
+
+
+    '''
+    Update existing periods work_time
+    '''
+    def update_period(self, period, period_name_id):
+        try:
+            con = self.create_connection()
+            c = con.cursor()
+            c.execute("UPDATE periods SET work_time=work_time + ? WHERE date=? AND name_id=?;",
+                      (period.get_work_time(), period.get_date(), period_name_id))
+            con.commit()
         except sqlite3.Error as e:
             print(e)
         finally:
@@ -125,3 +142,4 @@ class DatabaseModule:
             print(e)
         finally:
             c.close()
+
