@@ -24,6 +24,24 @@ class DatabaseModule:
 
 
     '''
+    Select statement to get all the saved periods
+    '''
+    def get_periods(self):
+        try:
+            con = self.create_connection()
+            c = con.cursor()
+            c.execute('SELECT * FROM periods;')
+            periods = c.fetchall()
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            c.close()
+            con.close()
+
+        return periods
+
+
+    '''
     Insert statement for period to periods table
     '''
     def insert_period(self, period, period_name_id):
@@ -48,7 +66,7 @@ class DatabaseModule:
         try:
             con = self.create_connection()
             c = con.cursor()
-            c.execute("UPDATE periods SET work_time=work_time + ? WHERE date=? AND name_id=?;",
+            c.execute('UPDATE periods SET work_time=work_time + ? WHERE date=? AND name_id=?;',
                       (period.get_work_time(), period.get_date(), period_name_id))
             con.commit()
         except sqlite3.Error as e:
@@ -74,6 +92,21 @@ class DatabaseModule:
         finally:
             c.close()
             con.close()
+
+
+    def get_period_name_by_id(self, period_name_id):
+        try:
+            con = self.create_connection()
+            c = con.cursor()
+            c.execute('SELECT period_name FROM period_names WHERE name_id=?', (period_name_id,))
+            period_name = c.fetchone()
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            c.close()
+            con.close()
+
+        return period_name
 
 
     '''

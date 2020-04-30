@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#from common_variables import header
+
 from data_structures.period import Period
 from modules.periods import Periods
 from modules.timer import TimerModule
@@ -9,7 +9,7 @@ from db.database import DatabaseModule
 import sqlite3
 import curses
 import os
-import time # For testing
+import time # Import for testing
 
 
 '''
@@ -28,7 +28,6 @@ class Monitor:
 
     def main(self):
         try:
-            # db = DatabaseModule(self.db_name)
             if not (os.path.isfile(self.db_name)):
                 con = self.db.create_connection()
                 self.db.create_database(con)
@@ -88,6 +87,8 @@ class Monitor:
                     break
                 elif (current_row_idx == 0):
                     self.timer_menu(current_row_idx)
+                elif (current_row_idx == 1):
+                    self.month_menu()
 
 
             self.stdscr.clear()
@@ -154,7 +155,7 @@ class Monitor:
 
             self.stdscr.refresh()
 
-        # Saves the data to database
+        # Saves the period to database
         self.db.insert_period_name(period)
         period_name_id = self.db.get_period_name_id(period)
         try:
@@ -166,8 +167,24 @@ class Monitor:
     '''
     Will contain menu to scroll years/months/dates and see your saved time periods
     '''
-    def build_month_menu(self):
-        print("Month menu")
+    def month_menu(self):
+
+        # Fetch periods
+        periods = []
+        db_periods = self.db.get_periods()
+        for x in range(0, len(db_periods)):
+            temp_period = Period()
+            temp_period.set_date(db_periods[x][0])
+            temp_period.set_name(self.db.get_period_name_by_id(db_periods[x][1])[0])
+            temp_period.set_work_time(db_periods[x][2])
+            periods.append(temp_period)
+
+        self.stdscr.clear()
+        for x in range(0, len(periods)):
+            self.stdscr.addstr(x, 0, periods[x].get_name().capitalize())
+
+        self.stdscr.refresh()
+        time.sleep(3)
 
 
 if __name__ == '__main__':
