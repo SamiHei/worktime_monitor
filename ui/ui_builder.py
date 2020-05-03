@@ -2,8 +2,9 @@
 
 from ui.main_menu_builder import MainMenuBuilder
 from ui.timer_menu_builder import TimerMenuBuilder
+from ui.common_builder import CommonBuilder
 
-class UiBuilder(MainMenuBuilder, TimerMenuBuilder):
+class UiBuilder(MainMenuBuilder, TimerMenuBuilder, CommonBuilder):
 
     def empty():
         print("Empty")

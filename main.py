@@ -86,9 +86,9 @@ class Monitor:
                 if (current_row_idx == (len(menu) - 1)):
                     break
                 elif (current_row_idx == 0):
-                    self.timer_menu(current_row_idx)
+                    self.timer_menu(0)
                 elif (current_row_idx == 1):
-                    self.month_menu()
+                    self.periods_menu(0)
 
 
             self.stdscr.clear()
@@ -167,7 +167,7 @@ class Monitor:
     '''
     Will contain menu to scroll years/months/dates and see your saved time periods
     '''
-    def month_menu(self):
+    def periods_menu(self, current_row_idx):
 
         # Fetch periods
         periods = []
@@ -179,12 +179,30 @@ class Monitor:
             temp_period.set_work_time(db_periods[x][2])
             periods.append(temp_period)
 
-        self.stdscr.clear()
-        for x in range(0, len(periods)):
-            self.stdscr.addstr(x, 0, periods[x].get_name().capitalize())
+        period_menu_items = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026']
 
+        self.stdscr.clear()
+        UiBuilder.scrollable_menu_list_items(self.stdscr, period_menu_items, current_row_idx)
         self.stdscr.refresh()
-        time.sleep(3)
+        
+        while 1:
+
+            key = self.stdscr.getch()
+
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = len(period_menu_items) - 1
+            elif (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(period_menu_items) - 1)):
+                current_row_idx = 0
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(period_menu_items) - 1)):
+                current_row_idx += 1
+            if (key == curses.KEY_BACKSPACE):
+                break
+
+            self.stdscr.clear()
+            UiBuilder.scrollable_menu_list_items(self.stdscr, period_menu_items, current_row_idx)
+            self.stdscr.refresh()
 
 
 if __name__ == '__main__':

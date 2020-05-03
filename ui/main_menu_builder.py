@@ -22,11 +22,11 @@ class MainMenuBuilder:
 
         h, w = stdscr.getmaxyx()
         menu_y = h//2 - len(menu)//2
+        x = w//2
         
         MainMenuBuilder.print_header(stdscr, header, menu_y)
 
         for idx, row in enumerate(menu):
-            x = w//2
             y = menu_y + idx
             if (idx == current_row_idx):
                 stdscr.attron(curses.color_pair(1))
