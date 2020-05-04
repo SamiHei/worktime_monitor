@@ -190,11 +190,11 @@ class Monitor:
             key = self.stdscr.getch()
 
             if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = len(period_menu_items) - 1
+                current_row_idx = 0
             elif (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
             elif (key == curses.KEY_DOWN and current_row_idx == (len(period_menu_items) - 1)):
-                current_row_idx = 0
+                current_row_idx = len(period_menu_items) - 1
             elif (key == curses.KEY_DOWN and current_row_idx < (len(period_menu_items) - 1)):
                 current_row_idx += 1
             if (key == curses.KEY_BACKSPACE):

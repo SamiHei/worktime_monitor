@@ -38,24 +38,56 @@ class CommonBuilder:
         first_row = menu_y
         x = w//2
 
-        if (len(menu_items) > 3 and current_row_idx > 2):
-            stdscr.addstr(first_row, x, ' ▲')
+        if (len(menu_items) > 3 and current_row_idx >= 2):
+            stdscr.addstr(first_row-1, x, ' ▲')
 
         if (len(menu_items) > 3 and current_row_idx < len(menu_items) - 2):
-            stdscr.addstr(first_row+5, x, ' ▼')
+            stdscr.addstr(first_row+4, x, ' ▼')
         
         for idx, row in enumerate(menu_items):
             y = menu_y + idx - 1
 
-            if (current_row_idx > 2 and idx < 2):
+            if (idx == current_row_idx == 0):
+                stdscr.attron(curses.color_pair(1))
+                stdscr.addstr(first_row, x, row)
+                stdscr.attroff(curses.color_pair(1))
                 continue
 
-            if (idx == current_row_idx):
+            elif (current_row_idx == 0 and idx > 0 and idx < 4):
+                stdscr.addstr(first_row+idx, x, row)
+                continue
+
+            if (idx == current_row_idx == 1):
+                stdscr.attron(curses.color_pair(1))
+                stdscr.addstr(y+1, x, row)
+                stdscr.attroff(curses.color_pair(1))
+                continue
+
+            elif (current_row_idx == 1 and idx == 0):
+                stdscr.addstr(first_row, x, row)
+                continue
+
+            elif (idx != current_row_idx == 1 and idx < 4):
+                stdscr.addstr(y+1, x, row)
+                continue
+
+            if (idx != current_row_idx >= 2 and idx == current_row_idx-1):
+                stdscr.addstr(y, x, row)
+                continue
+
+            elif (idx == current_row_idx >= 2):
                 stdscr.attron(curses.color_pair(1))
                 stdscr.addstr(y, x, row)
                 stdscr.attroff(curses.color_pair(1))
+                continue
 
-            elif (idx <= current_row_idx + 2):
+            elif (idx != current_row_idx >= 2 and idx < current_row_idx - 1):
+                continue
+
+            elif (idx != current_row_idx >= 2 and idx < current_row_idx + 3):
                 stdscr.addstr(y, x, row)
+                continue
+
+            # TODO: Continue from here!
 
         stdscr.refresh()
