@@ -179,7 +179,7 @@ class Monitor:
             temp_period.set_work_time(db_periods[x][2])
             periods.append(temp_period)
 
-        period_menu_items = ['2019', '2020', '2021']
+        period_menu_items = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028']
 
         self.stdscr.clear()
         UiBuilder.scrollable_menu_list_items(self.stdscr, period_menu_items, current_row_idx)

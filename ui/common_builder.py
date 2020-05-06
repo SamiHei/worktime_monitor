@@ -38,65 +38,74 @@ class CommonBuilder:
         x = w//2
         menu_len = len(menu_items)
 
-        if (menu_len >= 4 and current_row_idx >= 2):
+        # Scroll icons to menu
+        if (menu_len > 4 and current_row_idx >= 2):
             stdscr.addstr(menu_y-1, x, ' ▲')
 
-        if (menu_len >= 4 and current_row_idx < menu_len - 3):
+        if (menu_len > 4 and current_row_idx < menu_len - 3):
             stdscr.addstr(menu_y+4, x, ' ▼')
 
-        while 1:
+        # Actual menu items logic
+        if (current_row_idx == 0):
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y, x, menu_items[0])
+            stdscr.attroff(curses.color_pair(1))
 
-            if (current_row_idx == 0):
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(menu_y, x, menu_items[0])
-                stdscr.attroff(curses.color_pair(1))
-
-                for i in range(1, menu_len):
+            for i in range(1, menu_len):
+                if (i < 4):
                     stdscr.addstr(menu_y+i, x, menu_items[i])
+                else:
+                    break
 
-                break
+        elif (current_row_idx == 1):
+            stdscr.addstr(menu_y, x, menu_items[0])
+            
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y+1, x, menu_items[1])
+            stdscr.attroff(curses.color_pair(1))
 
-            elif (current_row_idx == 1):
-                stdscr.addstr(menu_y, x, menu_items[0])
-                
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(menu_y+1, x, menu_items[1])
-                stdscr.attroff(curses.color_pair(1))
-
-                for i in range(2, menu_len):
+            for i in range(2, menu_len):
+                if (i < 4):
                     stdscr.addstr(menu_y+i, x, menu_items[i])
-
-                break
-
-            elif (current_row_idx >= 2 and current_row_idx <= menu_len-3):
-                stdscr.addstr(menu_y, x, menu_items[current_row_idx-1])
+                else:
+                    break
                 
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(menu_y+1, x, menu_items[current_row_idx])
-                stdscr.attroff(curses.color_pair(1))
-
-                stdscr.addstr(menu_y+2, x, menu_items[current_row_idx+1])
-                stdscr.addstr(menu_y+3, x, menu_items[current_row_idx+2])
-                break
+        elif (current_row_idx >= 2 and current_row_idx <= menu_len-3):
+            stdscr.addstr(menu_y, x, menu_items[current_row_idx-1])
                 
-            elif (current_row_idx == menu_len-1):
-                stdscr.addstr(menu_y, x, menu_items[current_row_idx-3])
-                stdscr.addstr(menu_y+1, x, menu_items[current_row_idx-2])
-                stdscr.addstr(menu_y+2, x, menu_items[current_row_idx-1])
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(menu_y+3, x, menu_items[current_row_idx])
-                stdscr.attroff(curses.color_pair(1))
-                break
-
-            elif (current_row_idx == menu_len-2):
-                stdscr.addstr(menu_y, x, menu_items[current_row_idx-2])
-                stdscr.addstr(menu_y+1, x, menu_items[current_row_idx-1])
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y+1, x, menu_items[current_row_idx])
+            stdscr.attroff(curses.color_pair(1))
+            
+            stdscr.addstr(menu_y+2, x, menu_items[current_row_idx+1])
+            stdscr.addstr(menu_y+3, x, menu_items[current_row_idx+2])
+            
+        elif (current_row_idx == menu_len-1 == 2):
+            stdscr.addstr(menu_y, x, menu_items[current_row_idx-2])
+            stdscr.addstr(menu_y+1, x, menu_items[current_row_idx-1])
+            
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y+2, x, menu_items[current_row_idx])
+            stdscr.attroff(curses.color_pair(1))
+                        
+        elif (current_row_idx == menu_len-1 and menu_len > 3):
+            stdscr.addstr(menu_y, x, menu_items[current_row_idx-3])
+            stdscr.addstr(menu_y+1, x, menu_items[current_row_idx-2])
+            stdscr.addstr(menu_y+2, x, menu_items[current_row_idx-1])
+            
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y+3, x, menu_items[current_row_idx])
+            stdscr.attroff(curses.color_pair(1))
+        
+        elif (current_row_idx == menu_len-2):
+            stdscr.addstr(menu_y, x, menu_items[current_row_idx-2])
+            stdscr.addstr(menu_y+1, x, menu_items[current_row_idx-1])
                 
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(menu_y+2, x, menu_items[current_row_idx])
-                stdscr.attroff(curses.color_pair(1))
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(menu_y+2, x, menu_items[current_row_idx])
+            stdscr.attroff(curses.color_pair(1))
                 
-                stdscr.addstr(menu_y+3, x, menu_items[current_row_idx+1])
-                break
-
+            stdscr.addstr(menu_y+3, x, menu_items[current_row_idx+1])
+            
         stdscr.refresh()
+
