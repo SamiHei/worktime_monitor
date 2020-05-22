@@ -6,10 +6,11 @@ from modules.periods import PeriodsModule
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 from db.database import DatabaseModule
+from common_variables import list_of_months
 import sqlite3
 import curses
 import os
-import time # Import for testing
+import time
 
 
 '''
@@ -63,7 +64,7 @@ class Monitor:
     def main_menu(self, stdscr):
 
         current_row_idx = 0
-        menu = ["Timer", "Months", "Export", "About", "Exit"]
+        menu = ["Timer", "Periods", "Export", "About", "Exit"]
 
             
         UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
@@ -88,7 +89,7 @@ class Monitor:
                 elif (current_row_idx == 0):
                     self.timer_menu(0)
                 elif (current_row_idx == 1):
-                    self.periods_menu(0)
+                    self.periods_menu_years(0)
 
 
             self.stdscr.clear()
@@ -166,9 +167,9 @@ class Monitor:
 
 
     '''
-    Will contain menu to scroll years/months/dates and see your saved time periods
+    Menu to scroll years of your saved periods
     '''
-    def periods_menu(self, current_row_idx):
+    def periods_menu_years(self, current_row_idx):
 
         # Fetch periods
         period_years = []
@@ -198,11 +199,34 @@ class Monitor:
                 current_row_idx = len(period_years) - 1
             elif (key == curses.KEY_DOWN and current_row_idx < (len(period_years) - 1)):
                 current_row_idx += 1
-            if (key == curses.KEY_BACKSPACE):
+            elif (key == curses.KEY_ENTER or key in [10, 13]):
+                self.periods_menu_months(0, period_years[current_row_idx])
+            elif (key == curses.KEY_BACKSPACE):
                 break
 
             self.stdscr.clear()
             UiBuilder.scrollable_menu_list_items(self.stdscr, period_years, current_row_idx)
+            self.stdscr.refresh()
+
+    '''
+    Menu to scroll months of your saved periods
+    '''
+    def periods_menu_months(self, current_row_idx, selected_year):
+        year = selected_year
+        months_list = []
+        for x in range(0, len(self.periods_module.periods)):
+            temp_time = time.strptime(self.periods_module.periods[x].get_date(), "%d.%m.%Y")
+            if (list_of_months[temp_time.tm_mon] not in months_list):
+                months_list.append(list_of_months[temp_time.tm_mon])
+
+        self.stdscr.clear()
+        UiBuilder.scrollable_menu_list_items(self.stdscr, months_list, current_row_idx)
+        self.stdscr.refresh()
+        time.sleep(5)
+
+        while 1:
+            self.stdscr.clear()
+            self.stdscr.addstr(0, 0, selected_year)
             self.stdscr.refresh()
 
 
