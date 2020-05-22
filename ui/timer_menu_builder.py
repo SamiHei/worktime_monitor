@@ -14,7 +14,7 @@ class TimerMenuBuilder:
         menu_y = h//2 - len(menu_items)//2
         
         for idx, row in enumerate(menu_items):
-            x = w//2 - (len(row))//2 # Here maybe some fix so text is left aligned!
+            x = w//2 - (len(row))//2
             y = menu_y + idx
             if (idx == current_row_idx):
                 stdscr.attron(curses.color_pair(1))

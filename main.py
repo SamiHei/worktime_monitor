@@ -63,7 +63,7 @@ class Monitor:
     def main_menu(self, stdscr):
 
         current_row_idx = 0
-        menu = ["Timer", "Months", "Exit"]
+        menu = ["Timer", "Months", "Export", "About", "Exit"]
 
             
         UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
@@ -156,7 +156,7 @@ class Monitor:
             self.stdscr.refresh()
 
         # Saves the period to database
-        # Should i get periods and insert/update or update via error
+        # Should I get periods and insert/update or update via error
         self.db.insert_period_name(period)
         period_name_id = self.db.get_period_name_id(period)
         try:
@@ -171,15 +171,14 @@ class Monitor:
     def periods_menu(self, current_row_idx):
 
         # Fetch periods
-        periods = []
         period_years = []
         db_periods = self.db.get_periods()
         for x in range(0, len(db_periods)):
             temp_period = Period()
             period_name = self.db.get_period_name_by_id(db_periods[x][1])[0]
             temp_period.create_period_from_db(db_periods[x], period_name)
-            periods.append(temp_period)
-            temp_time = time.strptime(periods[0].get_date(), "%d.%m.%Y")
+            self.periods_module.add_period(temp_period)
+            temp_time = time.strptime(self.periods_module.periods[x].get_date(), "%d.%m.%Y")
             if (str(temp_time.tm_year) not in period_years):
                 period_years.append(str(temp_time.tm_year))
 

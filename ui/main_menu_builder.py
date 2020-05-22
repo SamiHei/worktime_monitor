@@ -48,7 +48,7 @@ class MainMenuBuilder:
         h, w = stdscr.getmaxyx()
 
         width = w//2 - 23
-        height = menu_y - 10
+        height = menu_y - 9
 
         stdscr.attron(curses.color_pair(2))
         for y, line in enumerate(menu_header.splitlines(), height):
