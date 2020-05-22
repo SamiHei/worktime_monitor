@@ -2,11 +2,9 @@
 
 
 """
-This module contains all the periods and methods for saving, reading and presenting
+This module contains methods for saving, reading, handling and presenting
 """
-class Periods:
-
-    periods = []
+class PeriodsModule:
 
 
     def __str__(self):
@@ -22,3 +20,6 @@ class Periods:
     def add_period(self, period):
         self.periods.append(period)
 
+
+    # def get_years(list_of_periods):
+        

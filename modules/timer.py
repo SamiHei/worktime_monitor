@@ -11,6 +11,8 @@ Timer module uses Python3 time standard library
      elapsed_time = saves measured time if timer is paused
      end_time = takes new time in seconds since the epoch
 
+TODO: Show the target name on the timer view?
+
 '''
 class TimerModule:
 

@@ -2,7 +2,7 @@
 
 
 from data_structures.period import Period
-from modules.periods import Periods
+from modules.periods import PeriodsModule
 from modules.timer import TimerModule
 from ui.ui_builder import UiBuilder
 from db.database import DatabaseModule
@@ -21,7 +21,7 @@ class Monitor:
     def __init__(self):
         self.stdscr = curses.initscr()
         self.timer = None
-        self.periods = Periods()
+        self.periods_module = PeriodsModule()
         self.db_name = "database.db"
         self.db = DatabaseModule(self.db_name)
 
@@ -156,6 +156,7 @@ class Monitor:
             self.stdscr.refresh()
 
         # Saves the period to database
+        # Should i get periods and insert/update or update via error
         self.db.insert_period_name(period)
         period_name_id = self.db.get_period_name_id(period)
         try:
@@ -171,18 +172,19 @@ class Monitor:
 
         # Fetch periods
         periods = []
+        period_years = []
         db_periods = self.db.get_periods()
         for x in range(0, len(db_periods)):
             temp_period = Period()
-            temp_period.set_date(db_periods[x][0])
-            temp_period.set_name(self.db.get_period_name_by_id(db_periods[x][1])[0])
-            temp_period.set_work_time(db_periods[x][2])
+            period_name = self.db.get_period_name_by_id(db_periods[x][1])[0]
+            temp_period.create_period_from_db(db_periods[x], period_name)
             periods.append(temp_period)
-
-        period_menu_items = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028']
+            temp_time = time.strptime(periods[0].get_date(), "%d.%m.%Y")
+            if (str(temp_time.tm_year) not in period_years):
+                period_years.append(str(temp_time.tm_year))
 
         self.stdscr.clear()
-        UiBuilder.scrollable_menu_list_items(self.stdscr, period_menu_items, current_row_idx)
+        UiBuilder.scrollable_menu_list_items(self.stdscr, period_years, current_row_idx)
         self.stdscr.refresh()
         
         while 1:
@@ -193,15 +195,15 @@ class Monitor:
                 current_row_idx = 0
             elif (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(period_menu_items) - 1)):
-                current_row_idx = len(period_menu_items) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(period_menu_items) - 1)):
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(period_years) - 1)):
+                current_row_idx = len(period_years) - 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(period_years) - 1)):
                 current_row_idx += 1
             if (key == curses.KEY_BACKSPACE):
                 break
 
             self.stdscr.clear()
-            UiBuilder.scrollable_menu_list_items(self.stdscr, period_menu_items, current_row_idx)
+            UiBuilder.scrollable_menu_list_items(self.stdscr, period_years, current_row_idx)
             self.stdscr.refresh()
 
 

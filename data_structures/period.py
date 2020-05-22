@@ -18,12 +18,12 @@ class Period:
         self.date = date.today().strftime("%d.%m.%Y")
         self.work_time = 0
 
-
-    def __str__(self):
-        string = "Date " + str(self.date) + " "
-        string += "Work time: " + str(self.work_time) + "s"
-        return string
     
+    def create_period_from_db(self, db_period_data, period_name):
+        self.set_name(period_name)
+        self.set_date(db_period_data[0])
+        self.set_work_time(db_period_data[2])
+
 
     def get_date(self):
         return self.date
