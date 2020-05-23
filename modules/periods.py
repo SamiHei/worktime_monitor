@@ -21,3 +21,7 @@ class PeriodsModule:
 
     def add_period(self, period):
         self.periods.append(period)
+
+
+    def get_periods_list(self):
+        return self.periods

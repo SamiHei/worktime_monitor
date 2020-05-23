@@ -208,6 +208,7 @@ class Monitor:
             UiBuilder.scrollable_menu_list_items(self.stdscr, period_years, current_row_idx)
             self.stdscr.refresh()
 
+
     '''
     Menu to scroll months of your saved periods
     '''
@@ -222,11 +223,29 @@ class Monitor:
         self.stdscr.clear()
         UiBuilder.scrollable_menu_list_items(self.stdscr, months_list, current_row_idx)
         self.stdscr.refresh()
-        time.sleep(5)
 
         while 1:
+
+            key = self.stdscr.getch()
+
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = 0
+            elif (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(months_list) - 1)):
+                current_row_idx = len(months_list) - 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(months_list) - 1)):
+                current_row_idx += 1
+            elif (key == curses.KEY_ENTER or key in [10, 13]):
+                self.stdscr.clear()
+                # TODO: Correct year and month values should be given here and check if last 0 is needed!
+                UiBuilder.print_period_data(self.stdscr, 2020, 4, self.periods_module, 0)
+                time.sleep(5)
+            elif (key == curses.KEY_BACKSPACE):
+                break
+
             self.stdscr.clear()
-            self.stdscr.addstr(0, 0, selected_year)
+            UiBuilder.scrollable_menu_list_items(self.stdscr, months_list, current_row_idx)
             self.stdscr.refresh()
 
 
