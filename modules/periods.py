@@ -2,15 +2,17 @@
 
 
 import time
-
+from data_structures.period import Period
 
 """
 This module contains list of Period data structures and methods for handling
 """
 class PeriodsModule:
 
-    def __init__(self):
+    def __init__(self, db):
         self.periods = []
+        if (db != None):
+            self.get_periods_from_db(db)
 
 
     def add_period(self, period):
@@ -32,3 +34,11 @@ class PeriodsModule:
 
         return periods_list
 
+
+    def get_periods_from_db(self, db):
+        db_periods = db.get_periods()
+        for x in range(0, len(db_periods)):
+            temp_period = Period()
+            period_name = db.get_period_name_by_id(db_periods[x][1])[0]
+            temp_period.create_period_from_db(db_periods[x], period_name)
+            self.add_period(temp_period)

@@ -24,9 +24,12 @@ class Monitor:
         self.stdscr = curses.initscr()
         self.timer = None
         self.exporter = None
-        self.periods_module = PeriodsModule()
         self.db_name = "database.db"
         self.db = DatabaseModule(self.db_name)
+        if (os.path.isfile(self.db_name)):
+            self.periods_module = PeriodsModule(self.db)
+        else:
+            self.periods_module = PeriodsModule(None)
 
 
     def main(self):
@@ -162,6 +165,7 @@ class Monitor:
         # Saves the period to database
         # Should I get periods and insert/update or update via error
         if (period.get_work_time() > 0):
+            self.periods_module.add_period(period)
             self.db.insert_period_name(period)
             period_name_id = self.db.get_period_name_id(period)
             try:
@@ -177,12 +181,8 @@ class Monitor:
 
         # Fetch periods
         period_years = []
-        db_periods = self.db.get_periods()
-        for x in range(0, len(db_periods)):
-            temp_period = Period()
-            period_name = self.db.get_period_name_by_id(db_periods[x][1])[0]
-            temp_period.create_period_from_db(db_periods[x], period_name)
-            self.periods_module.add_period(temp_period)
+        
+        for x in range(0, len(self.periods_module.get_periods())):
             temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
             if (str(temp_time.tm_year) not in period_years):
                 period_years.append(str(temp_time.tm_year))
@@ -219,6 +219,7 @@ class Monitor:
     def periods_menu_months(self, current_row_idx, selected_year):
         months_list = []
         months_num = []
+
         for x in range(0, len(self.periods_module.get_periods())):
             temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
             if (list_of_months[temp_time.tm_mon] not in months_list):

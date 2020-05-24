@@ -38,5 +38,5 @@ class ExportModule:
                 "Work time":self.periods[x].get_work_time()
             })
 
-        with open('periods.json', 'w') as f:
-            json.dump(data, f)
+        with open('periods.json', 'w') as jsonf:
+            json.dump(data, jsonf)
