@@ -44,7 +44,7 @@ class Monitor:
     Basic settings at start
     '''
     def set_start_settings(self):
-        self.stdscr.clear()
+        # self.stdscr.clear()
         curses.curs_set(0)
         curses.noecho()
         self.stdscr.keypad(True)
@@ -73,7 +73,7 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            self.stdscr.clear()
+            # self.stdscr.clear()
 
             if (key == curses.KEY_UP and current_row_idx == 0):
                 current_row_idx = len(menu) - 1
@@ -213,7 +213,6 @@ class Monitor:
     Menu to scroll months of your saved periods
     '''
     def periods_menu_months(self, current_row_idx, selected_year):
-        year = selected_year
         months_list = []
         for x in range(0, len(self.periods_module.periods)):
             temp_time = time.strptime(self.periods_module.periods[x].get_date(), "%d.%m.%Y")
@@ -239,13 +238,43 @@ class Monitor:
             elif (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
                 # TODO: Correct year and month values should be given here and check if last 0 is needed!
-                UiBuilder.print_period_data(self.stdscr, 2020, 4, self.periods_module, 0)
-                time.sleep(5)
+                # UiBuilder.print_period_data(self.stdscr, 2020, 4, self.periods_module, 1)
+                self.periods_view(current_row_idx, selected_year, 5)
             elif (key == curses.KEY_BACKSPACE):
                 break
 
             self.stdscr.clear()
             UiBuilder.scrollable_menu_list_items(self.stdscr, months_list, current_row_idx)
+            self.stdscr.refresh()
+
+
+    '''
+    Scrollable periods data view
+    '''
+    def periods_view(self, current_row_idx, selected_year, selected_month):
+
+        self.stdscr.clear()
+        UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, self.periods_module)
+        self.stdscr.refresh()
+
+        while 1:
+
+            key = self.stdscr.getch()
+
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = 0
+            elif (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(months_list) - 1)):
+                current_row_idx = len(months_list) - 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(months_list) - 1)):
+                current_row_idx += 1
+
+            elif (key == curses.KEY_BACKSPACE):
+                break
+
+            self.stdscr.clear()
+            UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, self.periods_module)
             self.stdscr.refresh()
 
 
