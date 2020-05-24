@@ -66,7 +66,7 @@ class Monitor:
         current_row_idx = 0
         menu = ["Timer", "Periods", "Export", "About", "Exit"]
 
-            
+
         UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
         
         while 1:
@@ -105,9 +105,8 @@ class Monitor:
         self.timer = TimerModule()
         period = Period()
 
-        while 1:
-            period.set_name(UiBuilder.print_ask_period_name(self.stdscr))
-            break
+        self.stdscr.clear()
+        period.set_name(UiBuilder.print_ask_period_name(self.stdscr))
 
         timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
 
@@ -158,12 +157,13 @@ class Monitor:
 
         # Saves the period to database
         # Should I get periods and insert/update or update via error
-        self.db.insert_period_name(period)
-        period_name_id = self.db.get_period_name_id(period)
-        try:
-            self.db.insert_period(period, period_name_id[0])
-        except sqlite3.Error:
-            self.db.update_period(period, period_name_id[0])
+        if (period.get_work_time() > 0):
+            self.db.insert_period_name(period)
+            period_name_id = self.db.get_period_name_id(period)
+            try:
+                self.db.insert_period(period, period_name_id[0])
+            except sqlite3.Error:
+                self.db.update_period(period, period_name_id[0])
 
 
     '''
@@ -179,7 +179,7 @@ class Monitor:
             period_name = self.db.get_period_name_by_id(db_periods[x][1])[0]
             temp_period.create_period_from_db(db_periods[x], period_name)
             self.periods_module.add_period(temp_period)
-            temp_time = time.strptime(self.periods_module.periods[x].get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
             if (str(temp_time.tm_year) not in period_years):
                 period_years.append(str(temp_time.tm_year))
 
@@ -214,10 +214,12 @@ class Monitor:
     '''
     def periods_menu_months(self, current_row_idx, selected_year):
         months_list = []
-        for x in range(0, len(self.periods_module.periods)):
-            temp_time = time.strptime(self.periods_module.periods[x].get_date(), "%d.%m.%Y")
+        months_num = []
+        for x in range(0, len(self.periods_module.get_periods())):
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
             if (list_of_months[temp_time.tm_mon] not in months_list):
                 months_list.append(list_of_months[temp_time.tm_mon])
+                months_num.append(temp_time.tm_mon)
 
         self.stdscr.clear()
         UiBuilder.scrollable_menu_list_items(self.stdscr, months_list, current_row_idx)
@@ -237,9 +239,7 @@ class Monitor:
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
-                # TODO: Correct year and month values should be given here and check if last 0 is needed!
-                # UiBuilder.print_period_data(self.stdscr, 2020, 4, self.periods_module, 1)
-                self.periods_view(current_row_idx, selected_year, 5)
+                self.periods_view(0, selected_year, months_num[current_row_idx])
             elif (key == curses.KEY_BACKSPACE):
                 break
 

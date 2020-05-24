@@ -5,21 +5,12 @@ import time
 
 
 """
-This module contains methods for saving, reading, handling and presenting
+This module contains list of Period data structures and methods for handling
 """
 class PeriodsModule:
 
-    periods = []
-
-
-    def __str__(self):
-        i = 0
-        for p in self.periods:
-            string = "Period {}\n".format(i)
-            string += str(p.get_date()) + "\n"
-            string += str(p.get_work_time()) + "\n"
-            i += 1
-        return string
+    def __init__(self):
+        self.periods = []
 
 
     def add_period(self, period):
@@ -40,3 +31,4 @@ class PeriodsModule:
                 periods_list.append(period)
 
         return periods_list
+
