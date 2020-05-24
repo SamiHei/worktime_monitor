@@ -13,10 +13,8 @@ class PeriodsViewBuilder:
         current_row_idx = Selected row index
     '''
     @staticmethod
-    def print_period_data(current_row_idx, stdscr, year, month, periods):
+    def print_period_data(current_row_idx, stdscr, year, month, periods_list):
         h, w = stdscr.getmaxyx()
-
-        periods_list = periods.get_periods_by_year_and_month(int(year), month)
 
         data_sets_shown = (h-1)//4
 
@@ -34,15 +32,18 @@ class PeriodsViewBuilder:
             minutes = work_time/60
             hours = minutes//60
             final_minutes = minutes - (60 * hours)
-            
-            stdscr.addstr(1 + (x * 4), 0, "Period date: {}".format(periods_list[x].get_date()))
-            stdscr.addstr(2 + (x * 4), 0, "Period name: " + periods_list[x].get_name().decode("utf-8").capitalize())
-            stdscr.addstr(3 + (x * 4), 0, "Period time: {} hour and {:.0f} minute".format(hours, final_minutes))
-            stdscr.addstr(4 + (x * 4), 0, "=" * (w//3))
-            
+
+            try:
+                stdscr.addstr(1 + (x * 4), 0, "Period date: {}".format(periods_list[x + current_row_idx].get_date()))
+                stdscr.addstr(2 + (x * 4), 0, "Period name: " + periods_list[x + current_row_idx].get_name().decode("utf-8").capitalize())
+                stdscr.addstr(3 + (x * 4), 0, "Period time: {} hour and {:.0f} minute".format(hours, final_minutes))
+                stdscr.addstr(4 + (x * 4), 0, "=" * (w//3))
+            except IndexError:
+                break
+                
             last_row = x
 
-        if (data_sets_shown < len(periods_list)):
+        if (current_row_idx < len(periods_list) - data_sets_shown):
             stdscr.addstr(5 + (last_row * 4), 15, '\/')
 
         stdscr.refresh()

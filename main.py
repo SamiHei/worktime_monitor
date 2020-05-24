@@ -253,11 +253,16 @@ class Monitor:
     '''
     def periods_view(self, current_row_idx, selected_year, selected_month):
 
+        periods_list = self.periods_module.get_periods_by_year_and_month(int(selected_year), selected_month)
+
         self.stdscr.clear()
-        UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, self.periods_module)
+        UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, periods_list)
         self.stdscr.refresh()
 
         while 1:
+
+            h, w = self.stdscr.getmaxyx()
+            data_sets_shown = (h-1)//4
 
             key = self.stdscr.getch()
 
@@ -265,16 +270,16 @@ class Monitor:
                 current_row_idx = 0
             elif (key == curses.KEY_UP and current_row_idx > 0):
                 current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(months_list) - 1)):
-                current_row_idx = len(months_list) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(months_list) - 1)):
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(periods_list) - 1)):
+                current_row_idx = len(periods_list) - 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(periods_list) - data_sets_shown)):
                 current_row_idx += 1
 
             elif (key == curses.KEY_BACKSPACE):
                 break
 
             self.stdscr.clear()
-            UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, self.periods_module)
+            UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, periods_list)
             self.stdscr.refresh()
 
 
