@@ -4,6 +4,7 @@
 from data_structures.period import Period
 from modules.periods import PeriodsModule
 from modules.timer import TimerModule
+from modules.export import ExportModule
 from ui.ui_builder import UiBuilder
 from db.database import DatabaseModule
 from common_variables import list_of_months
@@ -22,6 +23,7 @@ class Monitor:
     def __init__(self):
         self.stdscr = curses.initscr()
         self.timer = None
+        self.exporter = None
         self.periods_module = PeriodsModule()
         self.db_name = "database.db"
         self.db = DatabaseModule(self.db_name)
@@ -90,6 +92,8 @@ class Monitor:
                     self.timer_menu(0)
                 elif (current_row_idx == 1):
                     self.periods_menu_years(0)
+                elif (current_row_idx == 2):
+                    self.export_menu(0)
 
 
             self.stdscr.clear()
@@ -281,6 +285,25 @@ class Monitor:
             self.stdscr.clear()
             UiBuilder.print_period_data(current_row_idx, self.stdscr, selected_year, selected_month, periods_list)
             self.stdscr.refresh()
+
+
+    '''
+    View to export period data to csv or json file
+    '''
+    def export_menu(self, current_row_idx):
+
+        export_menu_items = ['Csv', 'Json']
+
+        self.stdscr.clear()
+        UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
+        self.stdscr.refresh()
+
+        while 1:
+
+            key = self.stdscr.getch()
+
+            if (key == curses.KEY_BACKSPACE):
+                break
 
 
 if __name__ == '__main__':
