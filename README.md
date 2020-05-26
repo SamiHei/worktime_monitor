@@ -6,14 +6,13 @@ Motivation: Program to monitor my own time usage when studying, programming etc.
 
 Run the program from the root folder by using following command:
 ```
-Python3 main.py
+python3 main.py
 ```
 
 ## Usage
 
-This is a monitoring program to keep up with your time usage
-
 On periods and export menu you can navigate back by using BACKSPACE
+
 On about view you can exit using BACKSPACE
 
 ## Programming language and libraries
