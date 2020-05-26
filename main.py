@@ -97,6 +97,8 @@ class Monitor:
                     self.periods_menu_years(0)
                 elif (current_row_idx == 2):
                     self.export_menu(0)
+                elif (current_row_idx == 3):
+                    self.about_view()
 
 
             self.stdscr.clear()
@@ -338,6 +340,19 @@ class Monitor:
             else:
                 UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
             self.stdscr.refresh()
+
+
+    def about_view(self):
+        self.stdscr.clear()
+        UiBuilder.about_view(self.stdscr)
+        self.stdscr.refresh()
+
+        while 1:
+
+            key = self.stdscr.getch()
+
+            if (key == curses.KEY_BACKSPACE):
+                break
 
 
 if __name__ == '__main__':
