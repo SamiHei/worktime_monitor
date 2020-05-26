@@ -3,9 +3,6 @@
 import sqlite3
 
 
-# Documentation: https://docs.python.org/3/library/sqlite3.html
-# TODO: error logging to file?
-
 class DatabaseModule:
 
 
