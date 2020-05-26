@@ -22,7 +22,7 @@ class ExportModule:
             for x in range(0, len(self.periods)):
                 writer.writerow(['Period {}'.format(x)])
                 writer.writerow(['Date', self.periods[x].get_date()])
-                writer.writerow(['Name', self.periods[x].get_name().decode('utf-8')])
+                writer.writerow(['Name', self.periods[x].get_name()])
                 writer.writerow(['Work time', self.periods[x].get_work_time()])
                 
 
@@ -34,7 +34,7 @@ class ExportModule:
             data['Period {}'.format(x)] = {}
             data['Period {}'.format(x)].update({
                 "Date":self.periods[x].get_date(),
-                "Name":self.periods[x].get_name().decode('utf-8'),
+                "Name":self.periods[x].get_name(),
                 "Work time":self.periods[x].get_work_time()
             })
 

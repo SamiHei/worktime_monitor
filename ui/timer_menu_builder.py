@@ -23,8 +23,6 @@ class TimerMenuBuilder:
             else:
                 stdscr.addstr(y, x, row)
 
-        stdscr.refresh()
-
 
     @staticmethod
     def print_timer_state_and_elapsed_time(stdscr, period_name, timer_state, elapsed_time):

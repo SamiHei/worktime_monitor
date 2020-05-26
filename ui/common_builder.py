@@ -24,7 +24,7 @@ class CommonBuilder:
             if (len(input) == 0):
                 input = stdscr.getstr(y, (x + len(input_question)), 20)
             else:
-                return input
+                return input.decode('utf-8')
 
 
     '''

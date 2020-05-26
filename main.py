@@ -49,7 +49,6 @@ class Monitor:
     Basic settings at start
     '''
     def set_start_settings(self):
-        # self.stdscr.clear()
         curses.curs_set(0)
         curses.noecho()
         self.stdscr.keypad(True)
@@ -66,11 +65,13 @@ class Monitor:
         curses.endwin()
 
 
+    '''
+    Main menu of the program
+    '''
     def main_menu(self, stdscr):
 
         current_row_idx = 0
         menu = ["Timer", "Periods", "Export", "About", "Exit"]
-
 
         UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
         
@@ -78,17 +79,9 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            # self.stdscr.clear()
+            current_row_idx = self.menu_scroll(key, current_row_idx, menu, 1)
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = len(menu) - 1
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(menu) - 1)):
-                current_row_idx = 0
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(menu) - 1)):
-                current_row_idx += 1
-            elif (key == curses.KEY_ENTER or key in [10, 13]):
+            if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (current_row_idx == (len(menu) - 1)):
                     break
                 elif (current_row_idx == 0):
@@ -99,7 +92,6 @@ class Monitor:
                     self.export_menu(0)
                 elif (current_row_idx == 3):
                     self.about_view()
-
 
             self.stdscr.clear()
             UiBuilder.print_main_menu(self.stdscr, menu, current_row_idx)
@@ -127,18 +119,10 @@ class Monitor:
         while 1:
                 
             key = self.stdscr.getch()
-                
-            self.stdscr.clear()
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = len(timer_menu) - 1
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(timer_menu) - 1)):
-                current_row_idx = 0
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(timer_menu) - 1)):
-                current_row_idx += 1
-            elif (key == curses.KEY_ENTER or key in [10, 13]):
+            current_row_idx = self.menu_scroll(key, current_row_idx, timer_menu, 1)
+
+            if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (current_row_idx == (len(timer_menu) - 1)):
                     period.set_work_time(self.timer.stop_timer())
                     break
@@ -147,16 +131,19 @@ class Monitor:
                     self.timer.start_timer()
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
+                    self.stdscr.refresh()
                 elif (current_row_idx == 1):
                     self.stdscr.clear()
                     self.timer.pause_timer()
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
+                    self.stdscr.refresh()
                 elif (current_row_idx == 2):
                     self.stdscr.clear()
                     self.timer.continue_timer()
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
+                    self.stdscr.refresh()
 
             self.stdscr.clear()
             UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
@@ -165,7 +152,6 @@ class Monitor:
             self.stdscr.refresh()
 
         # Saves the period to database
-        # Should I get periods and insert/update or update via error
         if (period.get_work_time() > 0):
             self.periods_module.add_period(period)
             self.db.insert_period_name(period)
@@ -181,7 +167,6 @@ class Monitor:
     '''
     def periods_menu_years(self, current_row_idx):
 
-        # Fetch periods
         period_years = []
         
         for x in range(0, len(self.periods_module.get_periods())):
@@ -197,15 +182,9 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = 0
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(period_years) - 1)):
-                current_row_idx = len(period_years) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(period_years) - 1)):
-                current_row_idx += 1
-            elif (key == curses.KEY_ENTER or key in [10, 13]):
+            current_row_idx = self.menu_scroll(key, current_row_idx, period_years, 1)
+
+            if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (len(period_years) != 0):
                     self.periods_menu_months(0, period_years[current_row_idx])
             elif (key == curses.KEY_BACKSPACE):
@@ -237,15 +216,9 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = 0
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(months_list) - 1)):
-                current_row_idx = len(months_list) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(months_list) - 1)):
-                current_row_idx += 1
-            elif (key == curses.KEY_ENTER or key in [10, 13]):
+            current_row_idx = self.menu_scroll(key, current_row_idx, months_list, 1)
+
+            if (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
                 self.periods_view(0, selected_year, months_num[current_row_idx])
             elif (key == curses.KEY_BACKSPACE):
@@ -274,16 +247,9 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = 0
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(periods_list) - 1)):
-                current_row_idx = len(periods_list) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(periods_list) - data_sets_shown)):
-                current_row_idx += 1
+            current_row_idx = self.menu_scroll(key, current_row_idx, periods_list, data_sets_shown)
 
-            elif (key == curses.KEY_BACKSPACE):
+            if (key == curses.KEY_BACKSPACE):
                 break
 
             self.stdscr.clear()
@@ -311,15 +277,9 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_UP and current_row_idx == 0):
-                current_row_idx = 0
-            elif (key == curses.KEY_UP and current_row_idx > 0):
-                current_row_idx -= 1
-            elif (key == curses.KEY_DOWN and current_row_idx == (len(export_menu_items) - 1)):
-                current_row_idx = len(export_menu_items) - 1
-            elif (key == curses.KEY_DOWN and current_row_idx < (len(export_menu_items) -1)):
-                current_row_idx += 1
-            elif (key == curses.KEY_ENTER or key in [10, 13] and periods_amount != 0):
+            current_row_idx = self.menu_scroll(key, current_row_idx, export_menu_items, 1)
+
+            if (key == curses.KEY_ENTER or key in [10, 13] and periods_amount != 0):
                 if (current_row_idx == 0):
                     self.exporter.export_csv()
                     UiBuilder.message_view(self.stdscr, "Csv export was successful!")
@@ -342,6 +302,9 @@ class Monitor:
             self.stdscr.refresh()
 
 
+    '''
+    About view of the program
+    '''
     def about_view(self):
         self.stdscr.clear()
         UiBuilder.about_view(self.stdscr)
@@ -353,6 +316,23 @@ class Monitor:
 
             if (key == curses.KEY_BACKSPACE):
                 break
+
+
+    '''
+    Logic to scroll the view
+    '''
+    def menu_scroll(self, key, current_row_idx, menu_items, remove_menu_items_arr_len):
+
+        if (key == curses.KEY_UP and current_row_idx == 0):
+            current_row_idx = 0
+        elif (key == curses.KEY_UP and current_row_idx > 0):
+            current_row_idx -= 1
+        elif (key == curses.KEY_DOWN and current_row_idx == (len(menu_items) - 1)):
+            current_row_idx = len(menu_items) - 1
+        elif (key == curses.KEY_DOWN and current_row_idx < (len(menu_items) - remove_menu_items_arr_len)):
+            current_row_idx += 1
+
+        return current_row_idx
 
 
 if __name__ == '__main__':
