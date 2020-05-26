@@ -29,7 +29,9 @@ Program is made with Python3 and uses following standard libraries:
 
 ## Technical solutions
 
-This program uses sqlite on creating local database and handling it
-Periods are saved and loaded from the local database
-You can export your data to .csv and .json formats and those are created on the root folder
+This program uses sqlite on creating local database and handling it.
+
+Periods are saved and loaded from the local database.
+
+You can export your data to .csv and .json formats and those are created on the root folder.
 
