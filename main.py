@@ -121,7 +121,7 @@ class Monitor:
 
         self.stdscr.clear()
 
-        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+        UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                    self.timer.get_state(), self.timer.get_elapsed_time())
 
         while 1:
@@ -145,21 +145,21 @@ class Monitor:
                 elif (current_row_idx == 0):
                     self.stdscr.clear()
                     self.timer.start_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                 elif (current_row_idx == 1):
                     self.stdscr.clear()
                     self.timer.pause_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                 elif (current_row_idx == 2):
                     self.stdscr.clear()
                     self.timer.continue_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
 
             self.stdscr.clear()
-            UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx,
+            UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                        self.timer.get_state(), self.timer.get_elapsed_time())
 
             self.stdscr.refresh()

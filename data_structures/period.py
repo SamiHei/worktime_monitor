@@ -51,5 +51,5 @@ class Period:
 
 
     def get_name(self):
-        return self.name
+        return self.name.decode('utf-8')
 

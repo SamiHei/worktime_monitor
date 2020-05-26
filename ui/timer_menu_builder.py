@@ -6,8 +6,8 @@ from ui.common_builder import CommonBuilder
 class TimerMenuBuilder:
 
     @staticmethod
-    def print_timer_menu(stdscr, menu_items, current_row_idx, timer_state, elapsed_time):
-        TimerMenuBuilder.print_timer_state_and_elapsed_time(stdscr, timer_state, elapsed_time)
+    def print_timer_menu(stdscr, menu_items, current_row_idx, period_name, timer_state, elapsed_time):
+        TimerMenuBuilder.print_timer_state_and_elapsed_time(stdscr, period_name, timer_state, elapsed_time)
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         h, w = stdscr.getmaxyx()
@@ -27,20 +27,19 @@ class TimerMenuBuilder:
 
 
     @staticmethod
-    def print_timer_state_and_elapsed_time(stdscr, timer_state, elapsed_time):
+    def print_timer_state_and_elapsed_time(stdscr, period_name, timer_state, elapsed_time):
 
+        period_name_string = "Period name: {}".format(period_name.capitalize())
         state_string = "Timer state: {}".format(timer_state)
         elapsed_time_string = "Elapsed time at pause: {} minutes".format(round(elapsed_time/60, 2))
         h, w = stdscr.getmaxyx()
 
-        x = w//2 - len(state_string)//2
-        y = h//2 - 5
-        x_e = w//2 - len(elapsed_time_string)//2
-        y_e = y - 1
+        x = w//2
+        y = h//2
 
-        stdscr.addstr(y, x, state_string)
-        stdscr.addstr(y_e, x_e, elapsed_time_string)
-
+        stdscr.addstr(y-5, x-(len(state_string)//2), state_string)
+        stdscr.addstr(y-6, x-(len(elapsed_time_string)//2), elapsed_time_string)
+        stdscr.addstr(y-7, x-(len(period_name_string)//2), period_name_string)
 
     @staticmethod
     def print_ask_period_name(stdscr):
