@@ -42,3 +42,4 @@ class PeriodsModule:
             period_name = db.get_period_name_by_id(db_periods[x][1])[0]
             temp_period.create_period_from_db(db_periods[x], period_name)
             self.add_period(temp_period)
+

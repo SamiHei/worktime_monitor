@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import curses
+import time
 
 
 '''
@@ -24,6 +25,20 @@ class CommonBuilder:
                 input = stdscr.getstr(y, (x + len(input_question)), 20)
             else:
                 return input
+
+
+    '''
+    This is view where you can write message which is shown in the middle of the screen.
+    Used for example if there are nothing to export or no periods to show in periods menu
+    '''
+    @staticmethod
+    def message_view(stdscr, message):
+        h, w = stdscr.getmaxyx()
+        x = w//2
+
+        stdscr.clear()
+        stdscr.addstr(h//2, x-(len(message)//2), message)
+        stdscr.refresh()
 
 
     '''
@@ -112,5 +127,5 @@ class CommonBuilder:
 
             stdscr.refresh()
         else:
-            stdscr.addstr(h//2, x-21, "Its still empty here go back with BACKSPACE")
+            CommonBuilder.message_view(stdscr, "Its still empty here, go back with BACKSPACE")
 

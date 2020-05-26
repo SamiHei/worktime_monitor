@@ -204,7 +204,8 @@ class Monitor:
             elif (key == curses.KEY_DOWN and current_row_idx < (len(period_years) - 1)):
                 current_row_idx += 1
             elif (key == curses.KEY_ENTER or key in [10, 13]):
-                self.periods_menu_months(0, period_years[current_row_idx])
+                if (len(period_years) != 0):
+                    self.periods_menu_months(0, period_years[current_row_idx])
             elif (key == curses.KEY_BACKSPACE):
                 break
 
@@ -294,17 +295,49 @@ class Monitor:
     def export_menu(self, current_row_idx):
 
         export_menu_items = ['Csv', 'Json']
+        periods_amount = len(self.periods_module.get_periods())
+        self.exporter = ExportModule(self.periods_module.get_periods())
 
         self.stdscr.clear()
-        UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
+        if (periods_amount == 0):
+            UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+        else:
+            UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
         self.stdscr.refresh()
 
         while 1:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_BACKSPACE):
+            if (key == curses.KEY_UP and current_row_idx == 0):
+                current_row_idx = 0
+            elif (key == curses.KEY_UP and current_row_idx > 0):
+                current_row_idx -= 1
+            elif (key == curses.KEY_DOWN and current_row_idx == (len(export_menu_items) - 1)):
+                current_row_idx = len(export_menu_items) - 1
+            elif (key == curses.KEY_DOWN and current_row_idx < (len(export_menu_items) -1)):
+                current_row_idx += 1
+            elif (key == curses.KEY_ENTER or key in [10, 13] and periods_amount != 0):
+                if (current_row_idx == 0):
+                    self.exporter.export_csv()
+                    UiBuilder.message_view(self.stdscr, "Csv export was successful!")
+                    time.sleep(1)
+                    break
+                elif (current_row_idx == 1):
+                    self.exporter.export_json()
+                    UiBuilder.message_view(self.stdscr, "Json export was successful!")
+                    time.sleep(1)
+                    break
+
+            elif (key == curses.KEY_BACKSPACE):
                 break
+
+            self.stdscr.clear()
+            if (periods_amount == 0):
+                UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+            else:
+                UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
+            self.stdscr.refresh()
 
 
 if __name__ == '__main__':
