@@ -11,6 +11,8 @@ python3 main.py
 
 ## Usage
 
+Periods with recorded time of 0 are not saved!
+
 On periods and export menu you can navigate back by using BACKSPACE
 
 On about view you can exit using BACKSPACE
