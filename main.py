@@ -19,7 +19,7 @@ Monitor is the base of the program which controls everything
 '''
 class Monitor:
 
-    
+
     def __init__(self):
         self.stdscr = curses.initscr()
         self.timer = None
@@ -32,6 +32,9 @@ class Monitor:
             self.periods_module = PeriodsModule(None)
 
 
+    '''
+    Starts the program
+    '''
     def main(self):
         try:
             if not (os.path.isfile(self.db_name)):
