@@ -23,6 +23,12 @@ class PeriodsModule:
         return self.periods
 
 
+    """
+    Returns periods with given year and month
+
+    year : int, year which the searched periods are from
+    month : int, month which the searched periods are from
+    """
     def get_periods_by_year_and_month(self, year, month):
         
         periods_list = []
@@ -35,6 +41,11 @@ class PeriodsModule:
         return periods_list
 
 
+    """
+    Gets all the periods from the database and adds to PeriodsModule periods list
+
+    db : DatabaseModule, used to call database method to get all periods
+    """
     def get_periods_from_db(self, db):
         db_periods = db.get_periods()
         for x in range(0, len(db_periods)):

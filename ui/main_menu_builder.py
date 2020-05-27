@@ -7,14 +7,14 @@ import curses
 class MainMenuBuilder:
 
 
-    '''
+    """
     Method to print menu items to screen
 
-        menu = Array of menu items
-        menu_header = ascii graphic header
-        current_row_idx = Selected row index
-
-    '''
+    stdscr : curses.stdscr, screen which is used to build view
+    menu : string list, list of menu items
+    menu_header : string, ascii graphic header
+    current_row_idx : int, Selected row index
+    """
     @staticmethod
     def print_main_menu(stdscr, menu, current_row_idx):
 
@@ -38,9 +38,13 @@ class MainMenuBuilder:
         stdscr.refresh()
 
 
-    '''
+    """
     Method to print ascii graphic header to menu
-    '''
+
+    stdscr : curses.stdscr, screen which is used to build view
+    menu_header : string, ascii graphic header
+    menu_y : int, given height from the calling funtion
+    """
     @staticmethod
     def print_header(stdscr, menu_header, menu_y):
         curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)

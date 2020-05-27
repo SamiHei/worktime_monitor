@@ -3,9 +3,23 @@
 import curses
 from ui.common_builder import CommonBuilder
 
+
+"""
+Builder for the timer view
+"""
 class TimerMenuBuilder:
 
 
+    """
+    Prints the wholeness of the timer menu
+
+    stdscr : curses.stdscr, screen which is used to build view
+    menu_items : string list, list of menu items
+    current_row_idx : int, index of the menu cursor
+    period_name : string, name of the currently recorded period
+    timer_state : string, state where the timer is currently on
+    elapsed_time : int, elapsed time from the start of the recording to latest pause
+    """
     @staticmethod
     def print_timer_menu(stdscr, menu_items, current_row_idx, period_name, timer_state, elapsed_time):
         TimerMenuBuilder.print_timer_state_and_elapsed_time(stdscr, period_name, timer_state, elapsed_time)
@@ -25,6 +39,14 @@ class TimerMenuBuilder:
                 stdscr.addstr(y, x, row)
 
 
+    """
+    Prints timer state and the elapsed time to the view
+    
+    stdscr : curses.stdscr, screen which is used to build view
+    period_name : string, name of the currently recorded period
+    timer_state : string, state where the timer is currently on
+    elapsed_time : int, elapsed time from the start of the recording to latest pause
+    """
     @staticmethod
     def print_timer_state_and_elapsed_time(stdscr, period_name, timer_state, elapsed_time):
 
@@ -41,6 +63,11 @@ class TimerMenuBuilder:
         stdscr.addstr(y-7, x-(len(period_name_string)//2), period_name_string)
 
 
+    """
+    Uses the common builders take user input and asks the period name
+
+    stdscr : curses.stdscr, screen which is used to build view
+    """
     @staticmethod
     def print_ask_period_name(stdscr):
         h, w = stdscr.getmaxyx()

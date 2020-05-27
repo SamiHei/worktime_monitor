@@ -14,9 +14,9 @@ import os
 import time
 
 
-'''
+"""
 Monitor is the base of the program which controls everything
-'''
+"""
 class Monitor:
 
 
@@ -32,9 +32,9 @@ class Monitor:
             self.periods_module = PeriodsModule(None)
 
 
-    '''
+    """
     Starts the program
-    '''
+    """
     def main(self):
         try:
             if not (os.path.isfile(self.db_name)):
@@ -48,9 +48,12 @@ class Monitor:
             self.end_program()
 
 
-    '''
+    """
     Basic settings at start
-    '''
+    noecho() allows to read keys and display them
+    keypad() enables keypad mode to get for example KEY_DOWN work
+    start_color() allows to use colors
+    """
     def set_start_settings(self):
         curses.curs_set(0)
         curses.noecho()
@@ -58,9 +61,9 @@ class Monitor:
         curses.start_color()
 
 
-    '''
+    """
     Will be called at the end of the program
-    '''
+    """
     def end_program(self):
         curses.nocbreak()
         self.stdscr.keypad(False)
@@ -68,9 +71,11 @@ class Monitor:
         curses.endwin()
 
 
-    '''
+    """
     Main menu of the program
-    '''
+
+    stdscr : curses.stdscr, Curses standard screen which is used to show everything
+    """
     def main_menu(self, stdscr):
 
         current_row_idx = 0
@@ -101,9 +106,11 @@ class Monitor:
             self.stdscr.refresh()
 
 
-    '''
+    """
     Timer view which uses Timer Module
-    '''
+
+    current_row_idx : int, index at the menu
+    """
     def timer_menu(self, current_row_idx):
 
         self.timer = TimerModule()
@@ -165,9 +172,11 @@ class Monitor:
                 self.db.update_period(period, period_name_id[0])
 
 
-    '''
+    """
     Menu to scroll years of your saved periods
-    '''
+
+    current_row_idx : int, index at the menu
+    """
     def periods_menu_years(self, current_row_idx):
 
         period_years = []
@@ -232,9 +241,13 @@ class Monitor:
             self.stdscr.refresh()
 
 
-    '''
+    """
     Scrollable periods data view
-    '''
+
+    current_row_idx : int, index of the scroll view
+    selected_year : int, year selected from the year menu
+    selected_month : int, month seleccted from the month menu
+    """
     def periods_view(self, current_row_idx, selected_year, selected_month):
 
         periods_list = self.periods_module.get_periods_by_year_and_month(int(selected_year), selected_month)
@@ -260,9 +273,11 @@ class Monitor:
             self.stdscr.refresh()
 
 
-    '''
+    """
     View to export period data to csv or json file
-    '''
+
+    current_row_idx : int, index of the menu
+    """
     def export_menu(self, current_row_idx):
 
         export_menu_items = ['Csv', 'Json']
@@ -305,9 +320,9 @@ class Monitor:
             self.stdscr.refresh()
 
 
-    '''
+    """
     About view of the program
-    '''
+    """
     def about_view(self):
         self.stdscr.clear()
         UiBuilder.about_view(self.stdscr)
@@ -321,9 +336,14 @@ class Monitor:
                 break
 
 
-    '''
+    """
     Logic to scroll the view
-    '''
+
+    key : curses.KEY_*, key pressed in the menu
+    current_row_indx : int, menu index
+    menu_items : string list, items of the menu
+    remove_menu_items_arr_len : int, remove amount of length of the menu items to set last possible index of the menu
+    """
     def menu_scroll(self, key, current_row_idx, menu_items, remove_menu_items_arr_len):
 
         if (key == curses.KEY_UP and current_row_idx == 0):

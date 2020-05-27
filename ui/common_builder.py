@@ -4,15 +4,20 @@ import curses
 import time
 
 
-'''
+"""
 Common builder for UI components used possibly in multiple locations and not related to specific UI builder
-'''
+"""
 class CommonBuilder:
 
 
-    '''
+    """
     Takes user input until given input is longer than 0
-    '''
+
+    stdscr : curses.stdscr, screen which is used to build view
+    y : int, height of the terminal size
+    x : int, width of the terminal size
+    input_question : string, question to be asked in the view
+    """
     @staticmethod
     def take_user_input(stdscr, y, x, input_question):
         curses.echo() 
@@ -27,10 +32,13 @@ class CommonBuilder:
                 return input.decode('utf-8')
 
 
-    '''
+    """
     This is view where you can write message which is shown in the middle of the screen.
     Used for example if there are nothing to export or no periods to show in periods menu
-    '''
+
+    stdscr : curses.stdscr, screen which is used to build view
+    message : string, message to be shown in the middle of the screen
+    """
     @staticmethod
     def message_view(stdscr, message):
         h, w = stdscr.getmaxyx()
@@ -41,9 +49,13 @@ class CommonBuilder:
         stdscr.refresh()
 
 
-    '''
+    """
     Creates scrollable menu from menu_items and shows indicators when it is possible to scroll
-    '''
+
+    stdscr : curses.stdscr, screen which is used to build view
+    menu_items : string list, list of menu items from where the menu is built
+    current_row_idx : int, index of the cursor in the menu
+    """
     @staticmethod
     def scrollable_menu_list_items(stdscr, menu_items, current_row_idx):
 

@@ -4,9 +4,9 @@
 class AboutViewBuilder:
 
 
-    '''
-    This builds the about view
-    '''
+    """
+    This builds the about view and here needs to be made the version changes manually
+    """
     @staticmethod
     def about_view(stdscr):
         h, w = stdscr.getmaxyx()
@@ -15,9 +15,9 @@ class AboutViewBuilder:
 
         message_program_name = "Time It Monitor"
         message_description = "'Program to keep track of your time usage'"
-        message_first_release = "First release date: 26.05.2020"
+        message_first_release = "First release date: 27.05.2020"
         message_version = "Version 1.0"
-        message_latest_release = "Latest update date: 26.05.2020"
+        message_latest_release = "Latest update date: 27.05.2020"
         message_author = "Author: SamiHei"
         message_documentation = "Documentation: https://github.com/SamiHei/worktime_monitor"
 

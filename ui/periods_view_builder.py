@@ -4,17 +4,16 @@
 class PeriodsViewBuilder:
 
 
-    '''
+    """
     Method to print periods data view
 
-        current_row_idx = Selected row index
-        stdscr = screen which is used in the program
-        year = Year of the data which is shown
-        month = Month of the data which is shown
-        periods_list = Periods to be shown on the view
-        data_sets_shown = amount of data sets that can fit on the screen size
-        
-    '''
+    current_row_idx : int, Selected row index
+    stdscr : curses.stdscr, screen which is used in the program
+    year : int, Year of the data which is shown
+    month : int, Month of the data which is shown
+    periods_list : string list, Periods to be shown on the view
+    data_sets_shown : int, amount of data sets that can fit on the screen size    
+    """
     @staticmethod
     def print_period_data(current_row_idx, stdscr, year, month, periods_list):
         h, w = stdscr.getmaxyx()
