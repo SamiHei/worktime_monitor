@@ -190,7 +190,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (len(period_years) != 0):
                     self.periods_menu_months(0, period_years[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key == curses.KEY_BACKSPACE or '\b'):
                 break
 
             self.stdscr.clear()
@@ -224,7 +224,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
                 self.periods_view(0, selected_year, months_num[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key == curses.KEY_BACKSPACE or '\b'):
                 break
 
             self.stdscr.clear()
@@ -252,7 +252,7 @@ class Monitor:
 
             current_row_idx = self.menu_scroll(key, current_row_idx, periods_list, data_sets_shown)
 
-            if (key == curses.KEY_BACKSPACE):
+            if (key == curses.KEY_BACKSPACE or '\b'):
                 break
 
             self.stdscr.clear()
@@ -294,7 +294,7 @@ class Monitor:
                     time.sleep(1)
                     break
 
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key == curses.KEY_BACKSPACE or '\b'):
                 break
 
             self.stdscr.clear()
@@ -317,7 +317,7 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_BACKSPACE):
+            if (key == curses.KEY_BACKSPACE or '\b'):
                 break
 
 
