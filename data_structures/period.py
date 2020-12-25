@@ -15,7 +15,7 @@ class Period:
 
     def __init__(self):
         self.name = None
-        self.date = date.today()
+        self.date = date.today().strftime("%Y-%m-%d")
         self.work_time = 0
 
     
