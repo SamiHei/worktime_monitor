@@ -189,7 +189,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (len(period_years) != 0):
                     self.periods_menu_months(0, period_years[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE or '\b'):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -223,7 +223,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
                 self.periods_view(0, selected_year, months_num[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE or '\b'):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -251,7 +251,7 @@ class Monitor:
 
             current_row_idx = self.menu_scroll(key, current_row_idx, periods_list, data_sets_shown)
 
-            if (key == curses.KEY_BACKSPACE or '\b'):
+            if (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -270,7 +270,7 @@ class Monitor:
 
         self.stdscr.clear()
         if (periods_amount == 0):
-            UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+            UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE or LEFT key")
         else:
             UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
         self.stdscr.refresh()
@@ -293,12 +293,12 @@ class Monitor:
                     time.sleep(1)
                     break
 
-            elif (key == curses.KEY_BACKSPACE or '\b'):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
             if (periods_amount == 0):
-                UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+                UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE or LEFT key")
             else:
                 UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
             self.stdscr.refresh()
@@ -316,7 +316,7 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_BACKSPACE or '\b'):
+            if (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
 
