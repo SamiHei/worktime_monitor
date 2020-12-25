@@ -28,7 +28,7 @@ class PeriodsModule:
         periods_list = []
         
         for period in self.get_periods():
-            temp_time = time.strptime(period.get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(period.get_date(), "%Y-%m-%d")
             if (temp_time.tm_year == year and temp_time.tm_mon == month):
                 periods_list.append(period)
 

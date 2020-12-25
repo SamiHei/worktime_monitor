@@ -169,11 +169,10 @@ class Monitor:
     Menu to scroll years of your saved periods
     '''
     def periods_menu_years(self, current_row_idx):
-
         period_years = []
-        
+
         for x in range(0, len(self.periods_module.get_periods())):
-            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%Y-%m-%d")
             if (str(temp_time.tm_year) not in period_years):
                 period_years.append(str(temp_time.tm_year))
 
@@ -206,7 +205,7 @@ class Monitor:
         months_num = []
 
         for x in range(0, len(self.periods_module.get_periods())):
-            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%Y-%m-%d")
             if (list_of_months[temp_time.tm_mon] not in months_list):
                 months_list.append(list_of_months[temp_time.tm_mon])
                 months_num.append(temp_time.tm_mon)
