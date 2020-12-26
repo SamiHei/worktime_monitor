@@ -41,6 +41,11 @@ You can export your data to .csv and .json formats and those are created on the 
 
 At the moment this program is only tested on Ubuntu 18.04 LTS
 
+If you are using Windows you need to install:
+```
+pip install windows-curses
+```
+
 ## Notes
 
 Program scales some, but probably wont work when using too small terminal size!

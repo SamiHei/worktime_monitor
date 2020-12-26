@@ -16,8 +16,8 @@ class AboutViewBuilder:
         message_program_name = "Time It Monitor"
         message_description = "'Program to keep track of your time usage'"
         message_first_release = "First release date: 26.05.2020"
-        message_version = "Version 1.1"
-        message_latest_release = "Latest update date: 25.12.2020"
+        message_version = "Version 1.2"
+        message_latest_release = "Latest update date: 26.12.2020"
         message_author = "Author: SamiHei"
         message_documentation = "Documentation: https://github.com/SamiHei/worktime_monitor"
 

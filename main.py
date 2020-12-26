@@ -112,7 +112,7 @@ class Monitor:
         self.stdscr.clear()
         period.set_name(UiBuilder.print_ask_period_name(self.stdscr))
 
-        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
+        timer_menu = ["Start timer", "Pause timer", "Exit"]
 
         self.stdscr.clear()
 
@@ -129,9 +129,15 @@ class Monitor:
                 if (current_row_idx == (len(timer_menu) - 1)):
                     period.set_work_time(self.timer.stop_timer())
                     break
-                elif (current_row_idx == 0):
+                elif (current_row_idx == 0 and self.timer.get_state() == "Stopped"):
                     self.stdscr.clear()
                     self.timer.start_timer()
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
+                                               self.timer.get_state(), self.timer.get_elapsed_time())
+                    self.stdscr.refresh()
+                elif (current_row_idx == 0):
+                    self.stdscr.clear()
+                    self.timer.continue_timer()
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                     self.stdscr.refresh()
@@ -141,12 +147,9 @@ class Monitor:
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                     self.stdscr.refresh()
-                elif (current_row_idx == 2):
-                    self.stdscr.clear()
-                    self.timer.continue_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
-                                               self.timer.get_state(), self.timer.get_elapsed_time())
-                    self.stdscr.refresh()
+
+                if (self.timer.get_state() != "Stopped" and timer_menu[0] != "Continue timer"):
+                    timer_menu[0] = "Continue timer"
 
             self.stdscr.clear()
             UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
