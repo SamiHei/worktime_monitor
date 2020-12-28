@@ -139,5 +139,5 @@ class CommonBuilder:
 
             stdscr.refresh()
         else:
-            CommonBuilder.message_view(stdscr, "Its still empty here, go back with BACKSPACE")
+            CommonBuilder.message_view(stdscr, "Its still empty here, go back with BACKSPACE or LEFT key")
 

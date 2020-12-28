@@ -40,12 +40,12 @@ class Monitor:
             if not (os.path.isfile(self.db_name)):
                 con = self.db.create_connection()
                 self.db.create_database(con)
+                con.close()
             self.set_start_settings()
             curses.wrapper(self.main_menu)
         except sqlite3.Error as e:
             print(e)
         finally:
-            con.close() # Don't know if necessary
             self.end_program()
 
 
@@ -173,6 +173,7 @@ class Monitor:
             try:
                 self.db.insert_period(period, period_name_id[0])
             except sqlite3.Error:
+                # This is not working correctly at the moment!!
                 self.db.update_period(period, period_name_id[0])
 
 
