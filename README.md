@@ -13,7 +13,7 @@ python3 main.py
 
 Periods with recorded time of 0 are not saved!
 
-On periods and export menu you can navigate back by using BACKSPACE
+On periods and export menu you can navigate back by using BACKSPACE or LEFT key
 
 On about view you can exit using BACKSPACE
 
@@ -40,6 +40,11 @@ You can export your data to .csv and .json formats and those are created on the 
 ## Tested operating systems
 
 At the moment this program is only tested on Ubuntu 18.04 LTS
+
+If you are using Windows you need to install:
+```
+pip install windows-curses
+```
 
 ## Notes
 

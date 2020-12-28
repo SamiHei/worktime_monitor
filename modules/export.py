@@ -27,7 +27,7 @@ class ExportModule:
                 writer.writerow(['Date', self.periods[x].get_date()])
                 writer.writerow(['Name', self.periods[x].get_name()])
                 writer.writerow(['Work time', self.periods[x].get_work_time()])
-                
+
 
     """
     Exports periods to .json file
@@ -46,3 +46,4 @@ class ExportModule:
 
         with open('periods.json', 'w') as jsonf:
             json.dump(data, jsonf)
+            jsonf.write("\n") # New line to end of the file (POSIX standard)

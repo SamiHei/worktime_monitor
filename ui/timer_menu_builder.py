@@ -27,7 +27,7 @@ class TimerMenuBuilder:
 
         h, w = stdscr.getmaxyx()
         menu_y = h//2 - len(menu_items)//2
-        
+
         for idx, row in enumerate(menu_items):
             x = w//2 - (len(row))//2
             y = menu_y + idx
@@ -52,15 +52,15 @@ class TimerMenuBuilder:
 
         period_name_string = "Period name: {}".format(period_name.capitalize())
         state_string = "Timer state: {}".format(timer_state)
-        elapsed_time_string = "Elapsed time at pause: {} minutes".format(round(elapsed_time/60, 2))
+        elapsed_time_string = "Elapsed time at pause: {:.1f} minutes".format(round(elapsed_time/60, 2))
         h, w = stdscr.getmaxyx()
 
         x = w//2
         y = h//2
 
-        stdscr.addstr(y-5, x-(len(state_string)//2), state_string)
-        stdscr.addstr(y-6, x-(len(elapsed_time_string)//2), elapsed_time_string)
-        stdscr.addstr(y-7, x-(len(period_name_string)//2), period_name_string)
+        stdscr.addstr(y-4, x-(len(state_string)//2), state_string)
+        stdscr.addstr(y-5, x-(len(elapsed_time_string)//2), elapsed_time_string)
+        stdscr.addstr(y-6, x-(len(period_name_string)//2), period_name_string)
 
 
     """

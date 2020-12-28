@@ -38,8 +38,8 @@ class PeriodsViewBuilder:
             try:
                 stdscr.addstr(1 + (x * 4), 0, "Period date: {}".format(periods_list[x + current_row_idx].get_date()))
                 stdscr.addstr(2 + (x * 4), 0, "Period name: {}".format(periods_list[x + current_row_idx].get_name().capitalize()))
-                stdscr.addstr(3 + (x * 4), 0, "Period time: {} hour and {:.0f} minute".format(hours, final_minutes))
-                stdscr.addstr(4 + (x * 4), 0, "=" * (w//3))
+                stdscr.addstr(3 + (x * 4), 0, "Period time: {:.0f} hour and {:.0f} minute".format(hours, final_minutes))
+                stdscr.addstr(4 + (x * 4), 0, "=" * (w//2))
             except IndexError:
                 break
                 

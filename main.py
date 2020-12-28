@@ -45,6 +45,7 @@ class Monitor:
         except sqlite3.Error as e:
             print(e)
         finally:
+            con.close() # Don't know if necessary
             self.end_program()
 
 
@@ -119,7 +120,7 @@ class Monitor:
         self.stdscr.clear()
         period.set_name(UiBuilder.print_ask_period_name(self.stdscr))
 
-        timer_menu = ["Start timer", "Pause timer", "Continue timer", "Exit"]
+        timer_menu = ["Start timer", "Pause timer", "Exit"]
 
         self.stdscr.clear()
 
@@ -136,9 +137,15 @@ class Monitor:
                 if (current_row_idx == (len(timer_menu) - 1)):
                     period.set_work_time(self.timer.stop_timer())
                     break
-                elif (current_row_idx == 0):
+                elif (current_row_idx == 0 and self.timer.get_state() == "Stopped"):
                     self.stdscr.clear()
                     self.timer.start_timer()
+                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
+                                               self.timer.get_state(), self.timer.get_elapsed_time())
+                    self.stdscr.refresh()
+                elif (current_row_idx == 0):
+                    self.stdscr.clear()
+                    self.timer.continue_timer()
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                     self.stdscr.refresh()
@@ -148,12 +155,9 @@ class Monitor:
                     UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
                                                self.timer.get_state(), self.timer.get_elapsed_time())
                     self.stdscr.refresh()
-                elif (current_row_idx == 2):
-                    self.stdscr.clear()
-                    self.timer.continue_timer()
-                    UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
-                                               self.timer.get_state(), self.timer.get_elapsed_time())
-                    self.stdscr.refresh()
+
+                if (self.timer.get_state() != "Stopped" and timer_menu[0] != "Continue timer"):
+                    timer_menu[0] = "Continue timer"
 
             self.stdscr.clear()
             UiBuilder.print_timer_menu(self.stdscr, timer_menu, current_row_idx, period.get_name(),
@@ -178,11 +182,10 @@ class Monitor:
     current_row_idx : int, index at the menu
     """
     def periods_menu_years(self, current_row_idx):
-
         period_years = []
-        
+
         for x in range(0, len(self.periods_module.get_periods())):
-            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%Y-%m-%d")
             if (str(temp_time.tm_year) not in period_years):
                 period_years.append(str(temp_time.tm_year))
 
@@ -199,7 +202,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 if (len(period_years) != 0):
                     self.periods_menu_months(0, period_years[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -215,7 +218,7 @@ class Monitor:
         months_num = []
 
         for x in range(0, len(self.periods_module.get_periods())):
-            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%d.%m.%Y")
+            temp_time = time.strptime(self.periods_module.get_periods()[x].get_date(), "%Y-%m-%d")
             if (list_of_months[temp_time.tm_mon] not in months_list):
                 months_list.append(list_of_months[temp_time.tm_mon])
                 months_num.append(temp_time.tm_mon)
@@ -233,7 +236,7 @@ class Monitor:
             if (key == curses.KEY_ENTER or key in [10, 13]):
                 self.stdscr.clear()
                 self.periods_view(0, selected_year, months_num[current_row_idx])
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -265,7 +268,7 @@ class Monitor:
 
             current_row_idx = self.menu_scroll(key, current_row_idx, periods_list, data_sets_shown)
 
-            if (key == curses.KEY_BACKSPACE):
+            if (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
@@ -286,7 +289,7 @@ class Monitor:
 
         self.stdscr.clear()
         if (periods_amount == 0):
-            UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+            UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE or LEFT key")
         else:
             UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
         self.stdscr.refresh()
@@ -309,12 +312,12 @@ class Monitor:
                     time.sleep(1)
                     break
 
-            elif (key == curses.KEY_BACKSPACE):
+            elif (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
             self.stdscr.clear()
             if (periods_amount == 0):
-                UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE")
+                UiBuilder.message_view(self.stdscr, "Nothing to export yet, go back with BACKSPACE or LEFT key")
             else:
                 UiBuilder.scrollable_menu_list_items(self.stdscr, export_menu_items, current_row_idx)
             self.stdscr.refresh()
@@ -332,7 +335,7 @@ class Monitor:
 
             key = self.stdscr.getch()
 
-            if (key == curses.KEY_BACKSPACE):
+            if (key in (curses.KEY_BACKSPACE, curses.KEY_LEFT)):
                 break
 
 
