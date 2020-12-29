@@ -167,13 +167,16 @@ class Monitor:
 
         # Saves the period to database
         if (period.get_work_time() > 0):
-            self.periods_module.add_period(period)
             self.db.insert_period_name(period)
             period_name_id = self.db.get_period_name_id(period)
-            try:
-                self.db.insert_period(period, period_name_id[0])
-            except sqlite3.Error:
-                # This is not working correctly at the moment!!
+            if not (self.periods_module.check_if_period_exists(period)):
+                self.periods_module.add_period(period)
+                try:
+                    self.db.insert_period(period, period_name_id[0])
+                except sqlite3.Error as e:
+                    print(e)
+            else:
+                self.periods_module.update_period_time(period, period.get_work_time())
                 self.db.update_period(period, period_name_id[0])
 
 

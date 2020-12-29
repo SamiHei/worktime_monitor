@@ -7,7 +7,7 @@ from datetime import date
 """
 This class presents working period which saves the date and the time 
 
-    date is presented in the format of DD.MM.YYYY
+    date is presented in the format of YYYY-MM-DD
     work_time is presented in seconds    
 """
 class Period:
@@ -23,6 +23,10 @@ class Period:
         self.set_name(period_name)
         self.set_date(db_period_data[0])
         self.set_work_time(db_period_data[2])
+
+
+    def update_work_time(self, time):
+        self.work_time += time
 
 
     def get_date(self):

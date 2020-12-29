@@ -19,8 +19,23 @@ class PeriodsModule:
         self.periods.append(period)
 
 
+    def update_period_time(self, period, time):
+        for p in self.periods:
+            if (period.get_date() == p.get_date()):
+                if (period.get_name() == p.get_name()):
+                    p.update_work_time(time)
+
+
     def get_periods(self):
         return self.periods
+
+
+    def check_if_period_exists(self, period):
+        for p in self.periods:
+            if (period.get_date() == p.get_date()):
+                if (period.get_name() == p.get_name()):
+                    return True
+        return False
 
 
     """
